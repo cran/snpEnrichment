@@ -1,0 +1,32 @@
+import(parallel)
+exportMethods(
+    "[",
+    "[<-",
+    "show",
+    "summary",
+    # "reset",
+    
+    # "newSNP",
+    # "is.SNP",
+    "chromosome",
+    "is.chromosome",
+    "enrichment",
+    "is.enrichment",
+    
+    "reSample",
+    "excludeSNP",
+    "compareEnrichment"
+)
+exportClasses(
+    "Chromosome",
+    "Enrichment"
+)
+export(
+    "initFiles",
+    "writeLD",
+    "readEnrichment",
+    "GC",
+    "mclapply2"
+)
+
+
