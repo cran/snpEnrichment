@@ -46,6 +46,8 @@ developer.
 \code{reg.finalizer} for actions to happen at garbage collection.
 }
 
+\author{Mickael Canouil \email{mickael.canouil@good.ibl.fr}}
+
 \keyword{GC}
 \keyword{garbage}
 

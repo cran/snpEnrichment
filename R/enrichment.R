@@ -7,14 +7,14 @@
 setClass(
     Class = "Enrichment", 
     representation = representation(
-        Signal = "data.frame", 
+        Loss = "data.frame", 
         Parameters = "list", 
         eSNP = "SNP",
         xSNP = "SNP",
         Chromosomes = "list"
     ), 
     prototype = prototype(
-        Signal = data.frame(), 
+        Loss = data.frame(), 
         Parameters = list(read = list(output = NULL, pattern = NULL, signalFile = NULL, transcriptFile = NULL, snpListDir = NULL, snpInfoDir = NULL, distThresh = NULL, sigThresh = NULL, LD = NULL, extendMethod = NULL), 
                             reSample = list(object = NULL, nSample = NULL, sigThresh = NULL, MAFpool = NULL)), 
         eSNP = newSNP(),
@@ -24,8 +24,8 @@ setClass(
 )
 
 
-setMethod(f = "enrichment", signature = "ANY", definition = function(Signal, Parameters, eSNP, xSNP, Chromosomes){
-    if (missing(Signal)) {Signal <- data.frame()} else {}
+setMethod(f = "enrichment", signature = "ANY", definition = function(Loss, Parameters, eSNP, xSNP, Chromosomes){
+    if (missing(Loss)) {Loss <- data.frame()} else {}
     if (missing(Parameters)) {
         Parameters <- list(read = list(output = NULL, pattern = NULL, signalFile = NULL, transcriptFile = NULL, snpListDir = NULL, 
                                         snpInfoDir = NULL, distThresh = NULL, sigThresh = NULL, LD = NULL, extendMethod = NULL), 
@@ -40,7 +40,7 @@ setMethod(f = "enrichment", signature = "ANY", definition = function(Signal, Par
         List <- eval(parse(text=paste("c(", paste(paste("Chromosomes$Chrom", seq(22), "@xSNP@List", sep = ""), collapse=", "), ")", sep="")))
         xSNP <- newSNP(List = List)
     } else {}
-    return(new("Enrichment", Signal = Signal, Parameters = Parameters, eSNP = eSNP, xSNP = xSNP, Chromosomes = Chromosomes))
+    return(new("Enrichment", Loss = Loss, Parameters = Parameters, eSNP = eSNP, xSNP = xSNP, Chromosomes = Chromosomes))
 })
 
 
@@ -76,7 +76,7 @@ setMethod(f = "summary", signature = "Enrichment", definition = function(object,
                 Z <- eval(parse(text = paste('object@', type,'@Z', sep = "")))
                 PValue <- eval(parse(text = paste('object@', type,'@PValue', sep = "")))
                 Resampling <- eval(parse(text = paste('nrow(object@', type,'@Resampling)', sep = "")))
-                Data <- eval(parse(text = paste('sum(object@Signal$IN)', sep = "")))
+                Data <- object@Loss["Signal", ncol(object@Loss)]
                 List <- eval(parse(text = paste('length(object@', type,'@List)', sep = "")))
                 resTmp <- c(if (length(EnrichmentRatio)==0) {NA} else {EnrichmentRatio}, 
                             if (length(Z)==0) {NA} else {Z}, 
@@ -101,7 +101,7 @@ setMethod(f = "summary", signature = "Enrichment", definition = function(object,
                 Z <- eval(parse(text = paste('object@', type,'@Z', sep = "")))
                 PValue <- eval(parse(text = paste('object@', type,'@PValue', sep = "")))
                 Resampling <- eval(parse(text = paste('nrow(object@', type,'@Resampling)', sep = "")))
-                Data <- eval(parse(text = paste('sum(object@Signal$IN)', sep = "")))
+                Data <- object@Loss["Signal", ncol(object@Loss)]
                 List <- eval(parse(text = paste('length(object@', type,'@List)', sep = "")))
                 resTmp <- c(if (length(EnrichmentRatio)==0) {NA} else {EnrichmentRatio}, 
                             if (length(Z)==0) {NA} else {Z}, 
@@ -142,24 +142,14 @@ setMethod(f = "summary", signature = "Enrichment", definition = function(object,
 
 
 .Enrichment.show <- function(object){
-    cat(" ~ Signal :", paste("(", paste(dim(object@Signal), collapse = "x"), ")", sep = ""))
-    cat("\n  * ", sum(object@Signal$IN == 0), " (", round((sum(object@Signal$IN == 0)/nrow(object@Signal))*100, digits = 2), " %) SNPs are removed", sep = "")
-    if (!is.null(object@Parameters$read$sigThresh)) {
+    cat(" ~ Loss :", paste("(", paste(dim(object@Loss), collapse = "x"), ")", sep = ""))
+    if (nrow(object@Loss) == 0) {
+        cat("\nNA")
+    } else {
         cat("\n")
-        distrib <- table(factor(object@Signal$PVALUE<object@Parameters$read$sigThresh, levels = c(FALSE, TRUE)), factor(object@Signal$IN, levels = c(0, 1)))
-        rownames(distrib) <- c(paste("P>=", object@Parameters$read$sigThresh, sep = ""), paste("P<", object@Parameters$read$sigThresh, sep = ""))
-        colnames(distrib) <- c("OUT", "IN")
-        print(distrib, quote = FALSE)
-    } else {}
-    # nrowShow <- min(5 , nrow(object@Signal))
-    # ncolShow <- min(5 , ncol(object@Signal))
-    # if (nrow(object@Signal) == 0) {
-        # cat("\nNA")
-    # } else {
-        # cat("\n")
-        # print(object@Signal[seq(nrowShow), seq(ncolShow)], quote = FALSE)
-        # cat("   ..... .....\n")
-    # }       
+        print(object@Loss[seq(2), ], quote = FALSE)
+        cat("   ..... .....\n")
+    }       
     # cat("\n ~ Parameters :", .showArgs(object@Parameters["read"]))
     # cat("\n               ", .showArgs(object@Parameters["reSample"]))
     cat("\n ~ eSNP :")
@@ -181,7 +171,7 @@ setMethod(f = "[", signature = "Enrichment", definition = function(x, i, j, drop
     nbChr <- length(x@Chromosomes)
     if (missing(j)) {
         switch(EXPR = i, 
-            "Signal" = {return(x@Signal)}, 
+            "Loss" = {return(x@Loss)}, 
             "Data" = {
                 resData <- mclapply2(seq(22), mc.cores = min(22, detectCores()), function(iChr) {
                     return(x@Chromosomes[[iChr]]@Data)
@@ -212,7 +202,7 @@ setMethod(f = "[", signature = "Enrichment", definition = function(x, i, j, drop
                     Z <- eval(parse(text = paste('x@', type,'@Z', sep = "")))
                     PValue <- eval(parse(text = paste('x@', type,'@PValue', sep = "")))
                     Resampling <- eval(parse(text = paste('nrow(x@', type,'@Resampling)', sep = "")))
-                    Data <- eval(parse(text = paste('sum(x@Signal$IN)', sep = "")))
+                    Data <- object@Loss["Signal", ncol(object@Loss)]
                     List <- eval(parse(text = paste('length(x@', type,'@List)', sep = "")))
                     resTmp <- c(if (length(EnrichmentRatio)==0) {NA} else {EnrichmentRatio}, 
                                 if (length(Z)==0) {NA} else {Z}, 
@@ -232,7 +222,7 @@ setMethod(f = "[", signature = "Enrichment", definition = function(x, i, j, drop
         if (max(j)>nbChr) {
             if (j == "ALL") {
                 switch(EXPR = i, 
-                    "Signal" = {return(x@Signal)}, 
+                    "Loss" = {return(x@Loss)}, 
                     "Data" = {
                         resData <- mclapply2(seq(22), mc.cores = min(22, detectCores()), function(iChr) {
                             return(x@Chromosomes[[iChr]]@Data)
@@ -296,7 +286,7 @@ setMethod(f = "[", signature = "Enrichment", definition = function(x, i, j, drop
                             Z <- eval(parse(text = paste('x@', type,'@Z', sep = "")))
                             PValue <- eval(parse(text = paste('x@', type,'@PValue', sep = "")))
                             Resampling <- eval(parse(text = paste('nrow(x@', type,'@Resampling)', sep = "")))
-                            Data <- eval(parse(text = paste('sum(x@Signal$IN)', sep = "")))
+                            Data <- object@Loss["Signal", ncol(object@Loss)]
                             List <- eval(parse(text = paste('length(x@', type,'@List)', sep = "")))
                             resTmp <- c(if (length(EnrichmentRatio)==0) {NA} else {EnrichmentRatio}, 
                                         if (length(Z)==0) {NA} else {Z}, 
@@ -503,7 +493,7 @@ setMethod(f = "[<-", signature = "Enrichment", definition = function(x, i, j, va
     nbChr <- length(x@Chromosomes)
     if (missing(j)) {
         switch(EXPR = i, 
-            "Signal" = {x@Signal <- value}, 
+            "Loss" = {x@Loss <- value}, 
             "Data" = {stop('[Enrichment:set] "Data" is not available for Set function', call. = FALSE)}, 
             "LD" = {stop('[Enrichment:set] "LD" is not available for Set function', call. = FALSE)}, 
             "Parameters" = {x@Parameters <- value}, 
@@ -527,7 +517,7 @@ setMethod(f = "[<-", signature = "Enrichment", definition = function(x, i, j, va
                 stop('[Enrichment:set] "j" must be atomic', call. = FALSE)
             } else {
                 switch(EXPR = i, 
-                    "Signal" = {x@Signal <- value}, 
+                    "Loss" = {x@Loss <- value}, 
                     "Data" = {stop('[Enrichment:set] "Data" is not available for Set function', call. = FALSE)}, 
                     "LD" = {stop('[Enrichment:set] "LD" is not available for Set function', call. = FALSE)}, 
                     "Parameters" = {x@Parameters <- value}, 
@@ -591,16 +581,16 @@ setMethod(f = "reSample", signature = "Enrichment", definition = function(object
         nSampleOld <- object@Parameters$reSample$nSample
         listRes <- eval(parse(text = paste("list(", paste(paste("Chrom", seq(22), " = NULL",  sep = ""), collapse = ", "), ")", sep = "")))
         for (iChr in seq(22)) {
-            cat("  **** Chromosome", if (nchar(iChr) == 1) {paste("0", iChr, sep = "")} else {iChr}, "Computation Start ***\n")
+            cat("  Chromosome ", if (nchar(iChr) == 1) {paste("0", iChr, sep = "")} else {iChr}, ": ", sep = "")
             listRes[[iChr]] <- reSample(object = object@Chromosomes[[iChr]], nSample = nSample, sigThresh = sigThresh, MAFpool = MAFpool, extendMethod = extendMethod, mc.cores = mc.cores)
-            cat("  ***** Chromosome", if (nchar(iChr) == 1) {paste("0", iChr, sep = "")} else {iChr}, "Computation End ****\n")
+            cat("END\n")
         }
         object@Chromosomes <- listRes
         rm(listRes)
 
-        cat("  ****** Genome Computation Start  *******\n")
+        cat("  Genome       : ")
         result <- .reSample(object = object, nSample = nSample, sigThresh = sigThresh, MAFpool = MAFpool, extendMethod = extendMethod, mc.cores = mc.cores)
-        cat("  ******* Genome Computation End  ********\n")
+        cat("END\n")
         rm(object)
         
         sysCall <- sys.call()
@@ -659,13 +649,21 @@ setMethod(f = "excludeSNP", signature = "Enrichment", definition = function(obje
         resParallel <- mclapply2(X = seq(22), mc.cores = min(22, mc.cores), FUN = function(iChr){
             chrObject <- eval(parse(text = paste('object@Chromosomes$Chrom', iChr, sep = "")))
             temp <- chrObject@Data
-            temp[temp[, "SNP"]%in%eSNPexclude, "eSNP"] <- 0
-            temp[temp[, "SNP"]%in%eSNPexclude, "xSNP"] <- 0
+            if (extendMethod == "ld") {
+                xSNPexclude <- intersect(temp[, "SNP"], unique(c(eSNPexclude, chrObject@LD[names(chrObject@LD) %in% eSNPexclude])))
+            } else {
+                if (extendMethod == "block") {
+                    temp0 <- temp[, c("SNP", "IDBLOCK")]
+                    xSNPexclude <- temp0[temp0[, "IDBLOCK"] %in% temp0[temp0[, "SNP"] %in% eSNPexclude, "IDBLOCK"], "SNP"]
+                } else {}
+            }
+            temp[temp[, "SNP"]%in%xSNPexclude, "eSNP"] <- 0
+            temp[temp[, "SNP"]%in%xSNPexclude, "xSNP"] <- 0
             res <- chromosome(Data = temp, LD = chrObject@LD)
             return(res)
         })
         names(resParallel) <- paste("Chrom", seq(22), sep = "")
-        result <- enrichment(Signal = object@Signal, 
+        result <- enrichment(Loss = object@Loss, 
                                 Chromosomes = resParallel, 
                                 Parameters = list(read = object@Parameters$read, reSample = NULL))
         rm(resParallel)
@@ -678,6 +676,9 @@ setMethod(f = "excludeSNP", signature = "Enrichment", definition = function(obje
         } else {}
         reSample(object = result, nSample = nSample, sigThresh = sigThresh, MAFpool = MAFpool, extendMethod = extendMethod, mc.cores = mc.cores)
         cat("########### Update SNP list END ############\n")
+        for (type in c("eSNP", "xSNP")) {
+            cat("   ", length(setdiff(object[type]@List, result[type]@List)), " SNPs are removed from", type, "list.\n")
+        }
         cat("########### Exclude SNP list END ###########\n")
         return(result)
     }
@@ -686,7 +687,7 @@ setMethod(f = "excludeSNP", signature = "Enrichment", definition = function(obje
 
 setMethod(f = "reset", signature = "Enrichment", definition = function(object, i) {
     switch(EXPR = i, 
-        "Signal" = {object@Signal <- data.frame()}, 
+        "Loss" = {object@Loss <- data.frame()}, 
         "Data" = {object@Chromosomes <- lapply(object@Chromosomes, reset, i = "Data")}, 
         "LD" = {object@Chromosomes <- lapply(object@Chromosomes, reset, i = "LD")}, 
         "Parameters" = {object@Parameters <- list(read = list(output = NULL, pattern = NULL, signalFile = NULL, transcriptFile = NULL, snpListDir = NULL, 
@@ -740,25 +741,34 @@ setMethod(f = "compareEnrichment", signature = "ANY", definition = function(list
                 temp1 <- readEnrichment(pattern = pattern, signalFile = signalFile, transcriptFile = transcriptFile, 
                                         snpListDir = list1, snpInfoDir = snpInfoDir, distThresh = distThresh, 
                                         sigThresh = sigThresh, LD = LD, extendMethod = extendMethod, mc.cores = mc.cores)
-                reSample(object = temp1, nSample = nSample, sigThresh = sigThresh, MAFpool = MAFpool, mc.cores = mc.cores)
-                temp1 <- reset(temp1, "Resampling")
                 cat("############### Read list 2 ################\n")
                 temp2 <- readEnrichment(pattern = pattern, signalFile = signalFile, transcriptFile = transcriptFile, 
                                         snpListDir = list2, snpInfoDir = snpInfoDir, distThresh = distThresh, 
                                         sigThresh = sigThresh, LD = LD, extendMethod = extendMethod, mc.cores = mc.cores)
-                reSample(object = temp2, nSample = nSample, sigThresh = sigThresh, MAFpool = MAFpool, mc.cores = mc.cores)
-                temp2 <- reset(temp2, "Resampling")
+
             } else {
                 stop('[Enrichment:compareEnrichment] "Enrichment" object is required', call. = FALSE)
                 return(invisible())
             }
         }
+
         l1 <- temp1@eSNP@List
         l2 <- temp2@eSNP@List
         if (identical(l1, l2)) {
-            stop('[Enrichment:compareEnrichment] both lists are identical', call. = FALSE)
+            stop('[Enrichment:compareEnrichment] Both lists are identical', call. = FALSE)
             return(invisible())
         } else {}
+        if (is.null(temp1@Parameters$reSample$nSample)) {
+            reSample(object = temp1, nSample = nSample, sigThresh = sigThresh, MAFpool = MAFpool, mc.cores = mc.cores)
+            temp1 <- reset(temp1, "Resampling")
+        } else {}
+        if (is.null(temp1@Parameters$reSample$nSample)) {
+            reSample(object = temp2, nSample = nSample, sigThresh = sigThresh, MAFpool = MAFpool, mc.cores = mc.cores)
+            temp2 <- reset(temp2, "Resampling")
+        } else {}
+
+        l1 <- temp1@eSNP@List
+        l2 <- temp2@eSNP@List
         if (length(l1)<length(l2)) {
             object1 <- temp1
             object2 <- temp2
@@ -776,7 +786,8 @@ setMethod(f = "compareEnrichment", signature = "ANY", definition = function(list
         cat("############ Comparison Start ##############\n")
         listRes <- eval(parse(text = paste("list(", paste(paste("Chrom", seq(22), " = NULL",  sep = ""), collapse = ", "), ")", sep = "")))
         for (iChr in seq(22)) {
-            cat("  **** Chromosome", if (nchar(iChr) == 1) {paste("0", iChr, sep = "")} else {iChr}, "Comparison Start ****\n")
+            # cat("  **** Chromosome", if (nchar(iChr) == 1) {paste("0", iChr, sep = "")} else {iChr}, "Comparison Start ****\n")
+            cat("  Chromosome ", if (nchar(iChr) == 1) {paste("0", iChr, sep = "")} else {iChr}, ": ", sep = "")
             listRes[[iChr]] <- .compareEnrich(object1 = object1@Chromosomes[[iChr]], object2 = object2@Chromosomes[[iChr]], nSample = nSample, sigThresh = sigThresh, MAFpool = MAFpool, extendMethod = extendMethod, mc.cores = mc.cores)
             if (identical(sort(object1@Chromosomes[[iChr]]@eSNP@List), sort(object2@Chromosomes[[iChr]]@eSNP@List))) {
                 listRes[[iChr]] <- reset(listRes[[iChr]], "Z")
@@ -784,13 +795,14 @@ setMethod(f = "compareEnrichment", signature = "ANY", definition = function(list
                 listRes[[iChr]]@eSNP@PValue <- as.numeric(NA)
                 listRes[[iChr]]@xSNP@PValue <- as.numeric(NA)
             } else {}
-            cat("  ***** Chromosome", if (nchar(iChr) == 1) {paste("0", iChr, sep = "")} else {iChr}, "Comparison End *****\n")
+            cat("END\n")
         }
 
-        cat("  ******* Genome Comparison Start  *******\n")
+        cat("  Genome       : ")
         result <- .compareEnrich(object1 = object1, object2 = object2, nSample = nSample, sigThresh = sigThresh, MAFpool = MAFpool, extendMethod = extendMethod, mc.cores = mc.cores)
         result@Chromosomes <- listRes
-        cat("  ******** Genome Comparison End  ********\n")
+        cat("END\n")
+
         res <- list(eSNP = NULL, xSNP = NULL)
         summaryObj1 <- summary(object1)
         summaryObj2 <- summary(object2)
@@ -804,6 +816,105 @@ setMethod(f = "compareEnrichment", signature = "ANY", definition = function(list
         return(res)
     } else {
         stop('[Enrichment:compareEnrichment] "Enrichment" object is required', call. = FALSE)
+        return(invisible())
+    }
+})
+
+
+setMethod(f = "plot", signature = "Enrichment", definition = function(x, chrNumber = NULL, types = c("eSNP", "xSNP"), ...){
+    for (type in types) {
+        if (any(c(Genome = nrow(x[type]@Resampling)==0, unlist(lapply(x@Chromosomes, function(x) {nrow(x[type]@Resampling)==0}))))) {
+            stop('[Enrichment:plot] "reSample" have to be run before "plot"', call. = FALSE)
+            return(invisible())
+        } else {}
+    }
+    
+    if (missing(chrNumber) | is.null(chrNumber)) {
+        matrixER <- list(eSNP = NULL, xSNP = NULL)
+        for (type in types) {
+            ER <- x[type]@EnrichmentRatio
+            resample <- x[type]@Resampling[, 5]
+            Z <- NULL
+            ERs <- NULL
+            size <- length(resample)
+            if (size >= 1000) {
+                interv <- unique(c(seq(from = if (size>=10) {10} else {2}, to = size, by = floor(size/1000)), size))
+            } else {
+                interv <- unique(c(seq(from = if (size>=10) {10} else {2}, to = size, by = 1), size))
+            }
+            for (k in interv) {
+                Z <- c(Z, (ER-mean(resample[1:k], na.rm = TRUE))/var(resample[1:k], na.rm = TRUE))
+                ERs <- resample
+            }
+            matrixER[[type]] <- Z
+        }
+        for (j in seq(22)) {
+            for (type in types) {
+                ER <- x@Chromosomes[[j]][type]@EnrichmentRatio
+                resample <- x@Chromosomes[[j]][type]@Resampling[, 5]
+                Z <- NULL
+                ERs <- NULL
+                size <- length(resample)
+                if (size >= 1000) {
+                    interv <- unique(c(seq(from = if (size>=10) {10} else {2}, to = size, by = floor(size/1000)), size))
+                } else {
+                    interv <- unique(c(seq(from = if (size>=10) {10} else {2}, to = size, by = 1), size))
+                }
+                for (k in interv) {
+                    Z <- c(Z, (ER-mean(resample[1:k], na.rm = TRUE))/var(resample[1:k], na.rm = TRUE))
+                    ERs <- resample
+                }
+                matrixER[[type]] <- cbind(matrixER[[type]], Z)
+            }
+        }
+        colors <- rainbow(22)
+        par(mfrow = c(1, length(types)))
+        for (type in types) {
+            matrixER[[type]] <- apply(matrixER[[type]], 2, scale)
+            plot(matrixER[[type]][, 1], ylab = "Z (scale and center)", xlab = type, type = "l", ylim = range(matrixER[[type]]), ...)
+            res <- sapply(seq(ncol(matrixER[[type]][, -1])), function(iER) {
+                lines(matrixER[[type]][, iER+1], type = "l", ylim = range(matrixER[[type]]), col = colors[iER+1])
+            })
+            colnames(matrixER[[type]]) <- c("Genome", paste0("Chrom", seq(22)))
+        }
+        return(invisible())
+    } else {
+        matrixER <- list(eSNP = NULL, xSNP = NULL)
+        colors <- rainbow(length(chrNumber))
+        par(mfrow = c(1, length(types)))
+        for (j in chrNumber) {
+            for (type in types) {
+                ER <- x@Chromosomes[[j]][type]@EnrichmentRatio
+                resample <- x@Chromosomes[[j]][type]@Resampling[, 5]
+                Z <- NULL
+                ERs <- NULL
+                size <- length(resample)
+                if (size >= 1000) {
+                    interv <- unique(c(seq(from = if (size>=10) {10} else {2}, to = size, by = floor(size/1000)), size))
+                } else {
+                    interv <- unique(c(seq(from = if (size>=10) {10} else {2}, to = size, by = 1), size))
+                }
+                for (k in interv) {
+                    Z <- c(Z, (ER-mean(resample[1:k], na.rm = TRUE))/var(resample[1:k], na.rm = TRUE))
+                    ERs <- resample
+                }
+                matrixER[[type]] <- cbind(matrixER[[type]], Z)
+            }
+        }
+        for (type in types) {
+            matrixER[[type]] <- apply(matrixER[[type]], 2, scale)
+            plot(matrixER[[type]][, 1], ylab = "Z (scale and center)", xlab = type, type = "l", ylim = range(matrixER[[type]]), col = colors[1], ...)
+            if (length(chrNumber)>2) {
+                res <- sapply(seq(ncol(matrixER[[type]][, -1])), function(iER) {
+                    lines(matrixER[[type]][, iER+1], type = "l", ylim = range(matrixER[[type]]), col = colors[iER+1])
+                })
+            } else {
+                if (length(chrNumber) == 2) {
+                     lines(matrixER[[type]][, 2], type = "l", ylim = range(matrixER[[type]]), col = colors[2])
+                } else {}
+            }
+            colnames(matrixER[[type]]) <- paste0("Chrom", chrNumber)
+        }
         return(invisible())
     }
 })

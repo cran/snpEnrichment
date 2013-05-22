@@ -65,6 +65,8 @@ A list of the same length as \code{X} and named by \code{X}.
 \code{mclapply} from package parallel.
 }
 
+\author{Mickael Canouil \email{mickael.canouil@good.ibl.fr}}
+
 \keyword{mclapply2}
 \keyword{parallel}
 \keyword{core}

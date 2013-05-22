@@ -24,4 +24,14 @@ See class \code{\link{readEnrichment}} and \code{\link{compareEnrichment}} for d
 
 % \references{}
 
+\seealso{
+Overview : \code{\link{snpEnrichment-package}} \cr
+Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{SNP}} \cr
+Methods :  \code{\link{plot}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
+            \code{\link{enrichment}}, \code{\link{is.enrichment}}, \code{\link{chromosome}}, \code{\link{is.chromosome}} \cr
+Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnrichment}}
+}
+
+\author{Mickael Canouil \email{mickael.canouil@good.ibl.fr}}
+
 \keyword{datasets}

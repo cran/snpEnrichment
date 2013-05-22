@@ -3,7 +3,7 @@ source(file.path(R.home("share"), "R", "examples-header.R"))
 options(warn = 1)
 library('snpEnrichment')
 
-assign(".oldSearch", search(), pos = 'CheckExEnv')
+base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 cleanEx()
 nameEx("Chromosome-class")
 ### * Chromosome-class
@@ -68,40 +68,40 @@ data(toyM1)
 toyEnrich <- enrichment()
 show(toyEnrich)
 
-toyEnrich["Signal"] <- toyM1["Signal"]
-head(toyEnrich["Signal"])
+toyEnrich["Loss"] <- toyM1["Loss"]
+toyEnrich["Loss"]
 
-toyEnrich <- enrichment(Signal = toyM1["Signal"], eSNP = toyM1["eSNP"])
-toyEnrich <- enrichment(Signal = toyM1["Signal"])
+toyEnrich <- enrichment(Loss = toyM1["Loss"], eSNP = toyM1["eSNP"])
+toyEnrich <- enrichment(Loss = toyM1["Loss"])
 
-reSample(object = toyM1, 
-         nSample = 100, 
-         sigThresh = 0.05, 
-         MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
-         extendMethod = "ld",
-         mc.cores = detectCores())
+# reSample(object = toyM1, 
+#          nSample = 10, 
+#          sigThresh = 0.05, 
+#          MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
+#          extendMethod = "ld",
+#          mc.cores = detectCores())
 summary(toyM1)
 
-excludeFile <- c(
-    "rs1561385", "rs7792796", "rs2514670", "rs9641913", "rs8184976",
-    "rs17582442", "rs7690663", "rs4940941", "rs7069561", "rs540218",
-    "rs17315714", "rs17795475", "rs7171423", "rs2392927", "rs12593911",
-    "rs4150477", "rs11608342", "rs16998578", "rs4299828", "rs915865",
-    "rs10976361", "rs7863276", "rs16908503", "rs544845", "rs1473462",
-    "rs4757541", "rs7640480", "rs7121036", "rs6803546", "rs10851981",
-    "rs4724502", "rs9540053", "rs10935849", "rs11193005", "rs6566417",
-    "rs1693294", "rs12759271", "rs17718970", "rs4774717", "rs455839",
-    "rs942278", "rs6545708", "rs7557832", "rs1498356", "rs11083318",
-    "rs9595937", "rs1561476", "rs12188654", "rs2048839", "rs4689801"
-)
-toyM1_exclude <- excludeSNP(toyM1, 
-                            excludeFile, 
-                            nSample = 100, 
-                            sigThresh = 0.05, 
-                            MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
-                            extendMethod = "ld",
-                            mc.cores = detectCores())
-summary(toyM1_exclude)
+# excludeFile <- c(
+    # "rs1561385", "rs7792796", "rs2514670", "rs9641913", "rs8184976",
+    # "rs17582442", "rs7690663", "rs4940941", "rs7069561", "rs540218",
+    # "rs17315714", "rs17795475", "rs7171423", "rs2392927", "rs12593911",
+    # "rs4150477", "rs11608342", "rs16998578", "rs4299828", "rs915865",
+    # "rs10976361", "rs7863276", "rs16908503", "rs544845", "rs1473462",
+    # "rs4757541", "rs7640480", "rs7121036", "rs6803546", "rs10851981",
+    # "rs4724502", "rs9540053", "rs10935849", "rs11193005", "rs6566417",
+    # "rs1693294", "rs12759271", "rs17718970", "rs4774717", "rs455839",
+    # "rs942278", "rs6545708", "rs7557832", "rs1498356", "rs11083318",
+    # "rs9595937", "rs1561476", "rs12188654", "rs2048839", "rs4689801"
+# )
+# toyM1_exclude <- excludeSNP(toyM1, 
+                            # excludeFile, 
+                            # nSample = 10, 
+                            # sigThresh = 0.05, 
+                            # MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
+                            # extendMethod = "ld",
+                            # mc.cores = detectCores())
+# summary(toyM1_exclude)
 
 
 
@@ -139,28 +139,28 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-data(toyM1) # data(toyM2)
-excludeFile <- c(
-    "rs1561385", "rs7792796", "rs2514670", "rs9641913", "rs8184976",
-    "rs17582442", "rs7690663", "rs4940941", "rs7069561", "rs540218",
-    "rs17315714", "rs17795475", "rs7171423", "rs2392927", "rs12593911",
-    "rs4150477", "rs11608342", "rs16998578", "rs4299828", "rs915865",
-    "rs10976361", "rs7863276", "rs16908503", "rs544845", "rs1473462",
-    "rs4757541", "rs7640480", "rs7121036", "rs6803546", "rs10851981",
-    "rs4724502", "rs9540053", "rs10935849", "rs11193005", "rs6566417",
-    "rs1693294", "rs12759271", "rs17718970", "rs4774717", "rs455839",
-    "rs942278", "rs6545708", "rs7557832", "rs1498356", "rs11083318",
-    "rs9595937", "rs1561476", "rs12188654", "rs2048839", "rs4689801"
-)
+# data(toyM1) # data(toyM2)
+# excludeFile <- c(
+    # "rs1561385", "rs7792796", "rs2514670", "rs9641913", "rs8184976",
+    # "rs17582442", "rs7690663", "rs4940941", "rs7069561", "rs540218",
+    # "rs17315714", "rs17795475", "rs7171423", "rs2392927", "rs12593911",
+    # "rs4150477", "rs11608342", "rs16998578", "rs4299828", "rs915865",
+    # "rs10976361", "rs7863276", "rs16908503", "rs544845", "rs1473462",
+    # "rs4757541", "rs7640480", "rs7121036", "rs6803546", "rs10851981",
+    # "rs4724502", "rs9540053", "rs10935849", "rs11193005", "rs6566417",
+    # "rs1693294", "rs12759271", "rs17718970", "rs4774717", "rs455839",
+    # "rs942278", "rs6545708", "rs7557832", "rs1498356", "rs11083318",
+    # "rs9595937", "rs1561476", "rs12188654", "rs2048839", "rs4689801"
+# )
 
-toyM1_exclude <- excludeSNP(toyM1, 
-                            excludeFile, 
-                            nSample = 100, 
-                            sigThresh = 0.05, 
-                            MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
-                            extendMethod = "ld",
-                            mc.cores = detectCores())
-toyM1_exclude
+# toyM1_exclude <- excludeSNP(toyM1, 
+                            # excludeFile, 
+                            # nSample = 10, 
+                            # sigThresh = 0.05, 
+                            # MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
+                            # extendMethod = "ld",
+                            # mc.cores = detectCores())
+# toyM1_exclude
 
 
 
@@ -180,7 +180,8 @@ flush(stderr()); flush(stdout())
 ## Not run:
 # snpInfoDir <- "./extdata/snpInfo/"
 # signalFile <- "./extdata/Signal/toySignal.txt"
-# initFiles(pattern = "Chrom", snpInfoDir, signalFile, 
+# snpListDir <- "./extData/List/"
+# initFiles(pattern = "Chrom", snpInfoDir, snpListDir, signalFile, 
 #           ldThresh = 0.8, LD = FALSE, mc.cores = detectCores())
 ## End (Not run)
 
@@ -235,6 +236,26 @@ is.enrichment(c(a, b = list(12, c))) # TRUE FALSE TRUE
 
 
 cleanEx()
+nameEx("plot-methods")
+### * plot-methods
+
+flush(stderr()); flush(stdout())
+
+### Name: plot-methods
+### Title: Plot method (S4) for 'Enrichment' object
+### Aliases: plot plot-methods plot,Enrichment-method
+###   plot,Enrichment,ANY-method
+### Keywords: snpEnrichment Enrichment plot methods
+
+### ** Examples
+
+# data(toyM1)
+# reSample(toyM1)
+# plot(toyM1)
+
+
+
+cleanEx()
 nameEx("reSample-methods")
 ### * reSample-methods
 
@@ -248,13 +269,13 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-data(toyM1)
-reSample(object = toyM1, 
-         nSample = 100, 
-         sigThresh = 0.05, 
-         MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5), 
-         extendMethod = "ld", mc.cores = detectCores())
-toyM1
+# data(toyM1)
+# reSample(object = toyM1, 
+         # nSample = 10, 
+         # sigThresh = 0.05, 
+         # MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5), 
+         # extendMethod = "ld", mc.cores = detectCores())
+# toyM1
 
 
 
@@ -319,7 +340,8 @@ flush(stderr()); flush(stdout())
 # initFiles(pattern = "Chrom", snpInfoDir, signalFile, 
 #           ldThresh = 0.8, LD = FALSE, mc.cores = detectCores())
 # writeLD(pattern = "Chrom", snpInfoDir, signalFile, 
-#         ldThresh = 0.8, mc.cores = detectCores())
+#         ldThresh = 0.8, onlySignal = TRUE, 
+#         mc.cores = detectCores())
 ## End (Not run)
 
 
@@ -345,50 +367,50 @@ flush(stderr()); flush(stdout())
 
 ########################
 ### 3. Computing results
-data(toyM1)
-reSample(object = toyM1, 
-         nSample = 100, 
-         sigThresh = 0.05, 
-         MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5), 
-         extendMethod = "ld", 
-         mc.cores = detectCores())
-toyM1
+# data(toyM1)
+# reSample(object = toyM1, 
+         # nSample = 10, 
+         # sigThresh = 0.05, 
+         # MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5), 
+         # extendMethod = "ld", 
+         # mc.cores = detectCores())
+# toyM1
 
 
 #######################
 ### 5. Further analysis
 ## Exclude SNP from original list.
-data(toyM1) # data(toyM2)
-excludeFile <- c(
-    "rs1561385", "rs7792796", "rs2514670", "rs9641913", "rs8184976",
-    "rs17582442", "rs7690663", "rs4940941", "rs7069561", "rs540218",
-    "rs17315714", "rs17795475", "rs7171423", "rs2392927", "rs12593911",
-    "rs4150477", "rs11608342", "rs16998578", "rs4299828", "rs915865",
-    "rs10976361", "rs7863276", "rs16908503", "rs544845", "rs1473462",
-    "rs4757541", "rs7640480", "rs7121036", "rs6803546", "rs10851981",
-    "rs4724502", "rs9540053", "rs10935849", "rs11193005", "rs6566417",
-    "rs1693294", "rs12759271", "rs17718970", "rs4774717", "rs455839",
-    "rs942278", "rs6545708", "rs7557832", "rs1498356", "rs11083318",
-    "rs9595937", "rs1561476", "rs12188654", "rs2048839", "rs4689801"
-)
+# data(toyM1) # data(toyM2)
+# excludeFile <- c(
+    # "rs1561385", "rs7792796", "rs2514670", "rs9641913", "rs8184976",
+    # "rs17582442", "rs7690663", "rs4940941", "rs7069561", "rs540218",
+    # "rs17315714", "rs17795475", "rs7171423", "rs2392927", "rs12593911",
+    # "rs4150477", "rs11608342", "rs16998578", "rs4299828", "rs915865",
+    # "rs10976361", "rs7863276", "rs16908503", "rs544845", "rs1473462",
+    # "rs4757541", "rs7640480", "rs7121036", "rs6803546", "rs10851981",
+    # "rs4724502", "rs9540053", "rs10935849", "rs11193005", "rs6566417",
+    # "rs1693294", "rs12759271", "rs17718970", "rs4774717", "rs455839",
+    # "rs942278", "rs6545708", "rs7557832", "rs1498356", "rs11083318",
+    # "rs9595937", "rs1561476", "rs12188654", "rs2048839", "rs4689801"
+# )
 
-toyM1_exclude <- excludeSNP(toyM1, 
-                            excludeFile, 
-                            nSample = 100, 
-                            sigThresh = 0.05, 
-                            MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
-                            extendMethod = "ld", 
-                            mc.cores = detectCores())
-toyM1_exclude
+# toyM1_exclude <- excludeSNP(toyM1, 
+                            # excludeFile, 
+                            # nSample = 10, 
+                            # sigThresh = 0.05, 
+                            # MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
+                            # extendMethod = "ld", 
+                            # mc.cores = detectCores())
+# toyM1_exclude
 
 
 ####################
 ### 4. Watch results
-show(toyM1)
-summary(toyM1)
+# show(toyM1)
+# summary(toyM1)
 
-show(toyM1_exclude)
-summary(toyM1_exclude)
+# show(toyM1_exclude)
+# summary(toyM1_exclude)
 
 
 
@@ -407,13 +429,6 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(toyM1)
-summary(toyM1)
-reSample(object = toyM1, 
-         nSample = 100, 
-         sigThresh = 0.05, 
-         MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
-         extendMethod = "ld", 
-         mc.cores = detectCores())
 summary(toyM1)
 
 
@@ -434,15 +449,17 @@ flush(stderr()); flush(stdout())
 ## Not run:
 # signalFile <- "./extData/Signal/toySignal.txt"
 # snpInfoDir <- "./extData/snpInfo/"
-# writeLD(pattern = "Chrom", snpInfoDir, signalFile, 
-#         ldThresh = 0.8, mc.cores = detectCores())
+# snpListDir <- "./extData/List/"
+# writeLD(pattern = "Chrom", snpInfoDir, snpListDir,
+#         signalFile, ldThresh = 0.8, onlySignal = TRUE, 
+#         mc.cores = detectCores())
 ## End (Not run)
 
 
 
 ### * <FOOTER>
 ###
-cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
+base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
 grDevices::dev.off()
 ###
 ### Local variables: ***

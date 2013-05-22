@@ -1,0 +1,25 @@
+2013-05-28 Mickael Canouil
+        * DESCRIPTION: version is 1.1-0
+        * R/Global.R: Some minor code optimization and simplification.
+        * R/Global.R:  The method 'excludeSNP' now exclude the extended list of SNP provided in 'excludeFile'.
+            Note: 'excludeFile' can be a character vector with SNPs or a file path which contains a SNPs list.
+        * R/Global.R: The function 'writeLD' now compute Linkage Disequilibrium for all SNPs in reference data or only for SNPs in signal.
+        * R/enrichment.R: The slot 'Signal' of Enrichment object is replaced by slot 'Loss'. This slot gives information about data losses (e.g. SNPs removed).
+        * R/Global.R: Add 'plot' method for Enrichment object. This method show the convergence of Z statistics. 
+            Z statistic is scaled and centered in order to compare the convergence in chromosomes/genome.
+        * R/Global.R: Fix a bug where some SNP which are not in reference data ('snpInfoDir') were not extended with SNP in LD.
+        * R/Global.R: Fix bug for the extend method 'LD block' where SNPs which are not in linkage with another SNP, are removed.
+        * man/*.Rd: Update Rd files with the R code correction.
+
+
+2013-05-17 Mickael Canouil
+        * DESCRIPTION: version is 1.0-2
+        * R/Global.R: Matrix or data.frame are not anymore evaluated in the slot 'Parameters' of Enrichment object.
+        * R/enrichment.R: Fix errors that occurred when the SNP list is too low in 'reSample' function.
+        * R/enrichment.R: Fix an error that occured in 'compareEnrichment', when non-resampled Enrichment objects are given in the list fields.
+
+
+2013-05-13 Mickael Canouil
+        * DESCRIPTION: version is 1.0-1
+        * R/Global.R: Some minor code optimization and simplification.
+        * R/enrichment.R: The method 'summary' is not anymore masked by loading 'snpEnrichment' package.

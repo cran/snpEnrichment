@@ -158,8 +158,6 @@ setMethod(f = "computeER", signature = "Chromosome", definition = function(objec
 setMethod(f = "doLDblock", signature = "Chromosome", definition = function(object, mc.cores = detectCores()) {
     if (!missing(object)) {
         data <- object@Data
-        jChr <- data[, "CHR"][1]
-        cat("    - do LD block for chromosome", if (nchar(jChr) == 1) {paste("0", jChr, sep = "")} else {jChr}, "...\n")
 
         nbCORES <- mc.cores
         nbCores <- max(1, round((nbCORES-22)/22))
@@ -216,12 +214,25 @@ setMethod(f = "doLDblock", signature = "Chromosome", definition = function(objec
         tmpChr <- mclapply2(seq(nrow(blockLim)), mc.cores = nbCores, function(i){
             m <- blockLim[i, ]
             interv <- seq(from = which(data[, "POS"] == m["MIN"]), to = which(data[, "POS"] == m["MAX"]))
+            interv
             data[interv, c("MIN", "MAX", "IDBLOCK", "LENGTH")] <- matrix(rep(m, length(interv)), nrow = length(interv), byrow = TRUE)
             data[data[, "IDBLOCK"]%in%m["IDBLOCK"], "MAFmedian"] <- median(data[data[, "IDBLOCK"]%in%m["IDBLOCK"], "MAF"])
             return(data[interv, ])
         })
 
-        data <- do.call("rbind", tmpChr)
+        dataTmp <- do.call("rbind", tmpChr)
+        missingData <- data[!data[, "SNP"]%in%dataTmp[, "SNP"], ]
+        maxIDBLOCK <- max(dataTmp[, "IDBLOCK"])
+        for (iRow in seq(nrow(missingData))) {
+            missingData[iRow, "MIN"] <- missingData[iRow, "POS"]
+            missingData[iRow, "MAX"] <- missingData[iRow, "POS"]
+            missingData[iRow, "LENGTH"] <- missingData[iRow, "MAX"] - missingData[iRow, "MIN"]
+            missingData[iRow, "MAFmedian"] <- missingData[iRow, "MAF"]
+            missingData[iRow, "IDBLOCK"] <- maxIDBLOCK + iRow
+        }
+
+        data <- rbind(missingData, dataTmp)
+        data <- data[order(data[, "POS"]), ]
         rownames(data) <- data[, "SNP"]
         object@Data <- data
         return(object)

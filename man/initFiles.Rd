@@ -15,13 +15,14 @@ Except if PLINK files (*.bed, *.bim and *.fam) or \code{signalFile} has changed.
 }
 
 \usage{
-initFiles(pattern = "Chrom", snpInfoDir, signalFile, 
+initFiles(pattern = "Chrom", snpInfoDir, snpListDir, signalFile, 
           ldThresh = 0.8, LD = FALSE, mc.cores = detectCores())
 }
 
 \arguments{
     \item{pattern}{[character]: character string containing a expression to be matched with all chromosomes files (e.g."Chrom" for  files which start by "Chrom" followed by the chromosome number).}
     \item{snpInfoDir}{[character]: character string naming a directory containing the reference data in a PLINK format (*.bed, *.bim and *.fam).}
+    \item{snpListDir}{[character]: character string naming a directory containing a list of SNPs for each chromosomes.}
     \item{signalFile}{[character]: the name of the signal file which the data are to be read from (2 columns: "SNP" and "PVALUE"). 
     Each row of the table appears as one line of the file.
     If it does not contain an \code{_absolute_} path, the file name is \code{_relative_} to the current working directory, \code{getwd}.
@@ -46,10 +47,12 @@ These files are used to build an \code{\linkS4class{Enrichment}} object by \code
 \seealso{
 Overview : \code{\link{snpEnrichment-package}} \cr
 Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{SNP}} \cr
-Methods :  \code{\link{reset}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
+Methods :  \code{\link{plot}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
             \code{\link{enrichment}}, \code{\link{is.enrichment}}, \code{\link{chromosome}}, \code{\link{is.chromosome}} \cr
 Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnrichment}}
 }
+
+\author{Mickael Canouil \email{mickael.canouil@good.ibl.fr}}
 
 \keyword{Enrichment}
 \keyword{initFiles}
@@ -60,7 +63,8 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 ## Not run:
 # snpInfoDir <- "./extdata/snpInfo/"
 # signalFile <- "./extdata/Signal/toySignal.txt"
-# initFiles(pattern = "Chrom", snpInfoDir, signalFile, 
+# snpListDir <- "./extData/List/"
+# initFiles(pattern = "Chrom", snpInfoDir, snpListDir, signalFile, 
 #           ldThresh = 0.8, LD = FALSE, mc.cores = detectCores())
 ## End (Not run)
 }

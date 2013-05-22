@@ -4,6 +4,7 @@ exportMethods(
     "[<-",
     "show",
     "summary",
+    "plot",
     # "reset",
     
     # "newSNP",

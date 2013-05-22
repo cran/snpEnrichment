@@ -40,20 +40,21 @@ It's a part of \code{\linkS4class{Chromosome}} and \code{\linkS4class{Enrichment
 
 \note{
 \code{\linkS4class{SNP}} object is not intended to be use directly by user. 
-It is a part of the \code{\linkS4class{Enrichment}} and \code{\linkS4class{Chromosome}}object.
+It is a part of the \code{\linkS4class{Enrichment}} and \code{\linkS4class{Chromosome}} object.
 }
 
 \seealso{
 Overview : \code{\link{snpEnrichment-package}} \cr
 Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{SNP}} \cr
-Methods :  \code{\link{reset}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
+Methods :  \code{\link{plot}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
             \code{\link{enrichment}}, \code{\link{is.enrichment}}, \code{\link{chromosome}}, \code{\link{is.chromosome}} \cr
 Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnrichment}}
 }
+
+\author{Mickael Canouil \email{mickael.canouil@good.ibl.fr}}
 
 \keyword{classes}
 \keyword{class}
 \keyword{snp}
 
 % \examples{}
-

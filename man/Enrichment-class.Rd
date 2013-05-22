@@ -25,7 +25,7 @@ This class is defined to summarize the enrichment analysis on each chromosomes a
     \code{\link{enrichment}} is defined to build an object of class \code{\linkS4class{Enrichment}} in order to compute an enrichment analysis.
     \code{Enrichment} is the object containing the results for all \code{\linkS4class{Chromosome}} object and for the whole genome.\cr
 
-    When an \code{\linkS4class{Enrichment}} object is created, it contains the original signal (e.g. GWAS), a list of SNPs. 
+    When an \code{\linkS4class{Enrichment}} object is created, it contains a list of SNPs (e.g. eSNPs). 
     All the others slots are "empty". After \code{\link{reSample}} is ran on an \code{\linkS4class{Enrichment}} object, 
     the slots: Table, EnrichmentRatio, Z, PValue and Resampling are filled.
 
@@ -35,7 +35,8 @@ This class is defined to summarize the enrichment analysis on each chromosomes a
 
 \section{Slots}{
     \describe{
-        \item{Signal}{[data.frame]: a three columns \code{data.frame}: "SNP", "PVALUE" and "IN" (e.g. GWAS). "IN" is computed during the reading step and gives informations about which SNPs are kept for the enrichment analysis.}
+        % \item{Signal}{[data.frame]: a three columns \code{data.frame}: "SNP", "PVALUE" and "IN" (e.g. GWAS). "IN" is computed during the reading step and gives informations about which SNPs are kept for the enrichment analysis.}
+        \item{Loss}{[data.frame]: a four columns \code{data.frame}: "Rows", "Unique", "Intersect.Ref.Signal" and "CIS". This slot gives information on data losses.}
         \item{Parameters}{[list]: each parameters used for the reading or resampling step are stored in this slot.}
         \item{eSNP, xSNP}{[SNP]: contain a \code{\linkS4class{SNP}} object (whith slots: SNP, Table, EnrichmentRatio, Z, PValue and Resampling) for a list of SNPs (\code{eSNP}) and an extended one (\code{xSNP}).}
         % \item{xSNP}{[SNP]: contains a \code{\linkS4class{SNP}} object (whith slots: SNP, Table, EnrichmentRatio, Z, PValue and Resampling) for an extended list of SNPs.}
@@ -50,7 +51,7 @@ Class \code{\linkS4class{SNP}}, directly.\cr
 
 \section{Methods}{
     \describe{
-        \item{enrichment(Signal, Parameters, eSNP, xSNP, Chromosomes):}{Generate and initialize a new \code{\linkS4class{Enrichment}} object.}
+        \item{enrichment(Loss, Parameters, eSNP, xSNP, Chromosomes):}{Generate and initialize a new \code{\linkS4class{Enrichment}} object.}
         \item{object["slotName"]:}{Get the value of the field \code{slotName}.}
         \item{object["slotName"]<-value:}{Set \code{value} to the field \code{slotName}.}
         \item{show(object):}{Return the formatted values of \code{\linkS4class{Enrichment}} object.}
@@ -69,10 +70,12 @@ Class \code{\linkS4class{SNP}}, directly.\cr
 \seealso{
 Overview : \code{\link{snpEnrichment-package}} \cr
 Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{SNP}} \cr
-Methods : \code{\link{reset}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
+Methods : \code{\link{plot}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
             \code{\link{enrichment}}, \code{\link{is.enrichment}}, \code{\link{chromosome}}, \code{\link{is.chromosome}} \cr
 Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnrichment}}
 }
+
+\author{Mickael Canouil \email{mickael.canouil@good.ibl.fr}}
 
 \keyword{classes}
 \keyword{class}
@@ -85,11 +88,11 @@ data(toyM1)
 toyEnrich <- enrichment()
 show(toyEnrich)
 
-toyEnrich["Signal"] <- toyM1["Signal"]
-head(toyEnrich["Signal"])
+toyEnrich["Loss"] <- toyM1["Loss"]
+toyEnrich["Loss"]
 
-toyEnrich <- enrichment(Signal = toyM1["Signal"], eSNP = toyM1["eSNP"])
-toyEnrich <- enrichment(Signal = toyM1["Signal"])
+toyEnrich <- enrichment(Loss = toyM1["Loss"], eSNP = toyM1["eSNP"])
+toyEnrich <- enrichment(Loss = toyM1["Loss"])
 
 # reSample(object = toyM1, 
 #          nSample = 10, 

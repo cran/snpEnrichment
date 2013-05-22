@@ -6,14 +6,14 @@
 \title{~ Overview: SNPs enrichment analysis ~}
 
 \description{
-Implements classes and methods for large-scale SNP enrichment analysis (e.g. SNPs associated with genes expression and a GWAS signal).
+Implements classes and methods for large-scale SNP enrichment analysis (e.g. SNPs associated with genes expression in a GWAS signal).
 }
 
 \details{\tabular{ll}{
 Package: \tab snpEnrichment\cr
 Title: \tab SNPs enrichment analysis\cr
 Author: \tab Mickael Canouil <mickael.canouil at good.ibl.fr>\cr
-Contributor: \tab Loic Yengo <loic.yengo at good.ibl.fr>\cr
+Contributor: \tab Loic Yengo\cr
 Maintainer: \tab Mickael Canouil <mickael.canouil at good.ibl.fr>\cr
 % Description: \tab Implements classes and methods for large-scale SNP enrichment analysis \cr (e.g. SNPs associated with genes expression and a GWAS signal) \cr
 License: \tab GPL (>= 2)\cr
@@ -29,10 +29,12 @@ In order to use all options, PLINK must be installed. PLINK is used to compute t
 \seealso{
 Overview : \code{\link{snpEnrichment-package}} \cr
 Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{SNP}} \cr
-Methods :  \code{\link{reset}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
+Methods :  \code{\link{plot}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
             \code{\link{enrichment}}, \code{\link{is.enrichment}}, \code{\link{chromosome}}, \code{\link{is.chromosome}} \cr
 Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnrichment}}
 }
+
+\author{Mickael Canouil \email{mickael.canouil@good.ibl.fr}}
 
 \keyword{package}
 \keyword{snpEnrichment}
@@ -55,7 +57,8 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 # initFiles(pattern = "Chrom", snpInfoDir, signalFile, 
 #           ldThresh = 0.8, LD = FALSE, mc.cores = detectCores())
 # writeLD(pattern = "Chrom", snpInfoDir, signalFile, 
-#         ldThresh = 0.8, mc.cores = detectCores())
+#         ldThresh = 0.8, onlySignal = TRUE, 
+#         mc.cores = detectCores())
 ## End (Not run)
 
 

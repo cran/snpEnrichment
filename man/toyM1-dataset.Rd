@@ -8,7 +8,7 @@
 \description{
 This data set gives an \code{\linkS4class{Enrichment}} object after,
 \code{\link{initFiles}} and \code{\link{readEnrichment}} is ran.
-The extend method used is "LD" asssociation (in \code{\link{readEnrichment}}: \code{extendMethod="ld"}).
+The LD extend method used is "LD" (in \code{\link{readEnrichment}}: \code{extendMethod="ld"}).
 Genome Build 37.3 (hg19).
 }
 
@@ -24,5 +24,15 @@ See class \code{\linkS4class{Enrichment}} for details about the format.
 % \source{}
 
 % \references{}
+
+\seealso{
+Overview : \code{\link{snpEnrichment-package}} \cr
+Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{SNP}} \cr
+Methods :  \code{\link{plot}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
+            \code{\link{enrichment}}, \code{\link{is.enrichment}}, \code{\link{chromosome}}, \code{\link{is.chromosome}} \cr
+Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnrichment}}
+}
+
+\author{Mickael Canouil \email{mickael.canouil@good.ibl.fr}}
 
 \keyword{datasets}
