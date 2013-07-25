@@ -10,7 +10,7 @@ Plot method (S4) for \code{\linkS4class{Enrichment}} object
 }
 
 \description{
-\code{\link{plot}} is a generic function used to produce result summaries of the results of various model fitting functions.
+\code{\link{plot}} is a generic function for plotting of R objects.
 The function invokes particular \code{methods} which depend on the \code{class} of the first argument.
 }
 

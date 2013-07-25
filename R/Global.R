@@ -91,7 +91,8 @@ maxCores <- function(mc.cores = detectCores()) {
 }
 
 
-.writeSignal <- function(pattern, snpInfoDir, snpListDir, signalFile) {
+# .writeSignal <- function(pattern, snpInfoDir, snpListDir, signalFile) {
+.writeSignal <- function(pattern, snpInfoDir, signalFile) {
     if (length(unlist(strsplit(readLines(signalFile, n = 1), split = "\t")))>1) {
         signal <- read.delim(file = signalFile, header = TRUE, sep = "\t", stringsAsFactors = FALSE, 
                         colClasses = c("character", "numeric"), na.string = c("NA", ""), 
@@ -111,9 +112,9 @@ maxCores <- function(mc.cores = detectCores()) {
                             colClasses = c("numeric", "character", "NULL", "NULL", "NULL", "NULL"), na.string = c("NA", ""), 
                             check.names = FALSE, strip.white = TRUE, col.names =  c("CHR", "SNP", "", "", "", ""))
     signal <- merge(signal, chrom.bim, by = "SNP")[, c(3, 1, 2)]
-    eSNP <- .readSNP(pattern = pattern, snpListDir = snpListDir)
-    eSNPplink <- matrix(unique(merge(eSNP, chrom.bim, by = "SNP")[, 1]), dimnames = list(NULL, "SNP"))
-    signal <- merge(signal, eSNPplink, by = "SNP", all = TRUE)[, c(2, 1, 3)]
+    # eSNP <- .readSNP(pattern = pattern, snpListDir = snpListDir)
+    # eSNPplink <- matrix(unique(merge(eSNP, chrom.bim, by = "SNP")[, 1]), dimnames = list(NULL, "SNP"))
+    # signal <- merge(signal, eSNPplink, by = "SNP", all = TRUE)[, c(2, 1, 3)]
     eval(parse(text = paste('write.table(signal, file = "', 
                             paste(snpInfoDir, pattern, ".signal", sep = ""), 
                             '", quote = FALSE, row.names = FALSE, col.names = FALSE, sep = "\t")', sep = "")))
@@ -121,7 +122,7 @@ maxCores <- function(mc.cores = detectCores()) {
 }
 
 
-writeLD <- function(pattern = "Chrom", snpInfoDir, snpListDir, signalFile, ldThresh = 0.8, onlySignal = TRUE, mc.cores = detectCores()) {
+writeLD <- function(pattern = "Chrom", snpInfoDir, signalFile, ldThresh = 0.8, onlySignal = TRUE, mc.cores = detectCores()) {
     if (missing(pattern) | missing(snpInfoDir) | missing(signalFile) | missing(ldThresh)) {
         stop('[Enrichment:writeLD] argument(s) missing', call. = FALSE)
         return(invisible())
@@ -133,7 +134,7 @@ writeLD <- function(pattern = "Chrom", snpInfoDir, snpListDir, signalFile, ldThr
                 FILES <- list.files(snpInfoDir)
                 resParallel <- mclapply2(X = seq(22), mc.cores = min(22, mc.cores), FUN = function(iChr){
                     newPattern <- unlist(strsplit(grep(paste(pattern, iChr, ".*.bim", sep = ""), FILES, value = TRUE), ".bim"))[1]
-                    .writeSignal(pattern = newPattern, snpInfoDir, snpListDir, signalFile)
+                    .writeSignal(pattern = newPattern, snpInfoDir, signalFile)
                     system(paste("dir=", eval(paste(snpInfoDir, newPattern, sep = "")), 
                                 "\nsnplist=", eval(paste(snpInfoDir, newPattern, ".signal", sep = "")), 
                                 "\nldThresh=", eval(ldThresh), 
@@ -143,7 +144,7 @@ writeLD <- function(pattern = "Chrom", snpInfoDir, snpListDir, signalFile, ldThr
                 FILES <- list.files(snpInfoDir)
                 resParallel <- mclapply2(X = seq(22), mc.cores = min(22, mc.cores), FUN = function(iChr){
                     newPattern <- unlist(strsplit(grep(paste(pattern, iChr, ".*.bim", sep = ""), FILES, value = TRUE), ".bim"))[1]
-                    .writeSignal(pattern = newPattern, snpInfoDir, snpListDir, signalFile)
+                    .writeSignal(pattern = newPattern, snpInfoDir, signalFile)
                     system(paste("dir=", eval(paste(snpInfoDir, newPattern, sep = "")), 
                                 "\nsnplist=", eval(paste(snpInfoDir, newPattern, ".signal", sep = "")), 
                                 "\nldThresh=", eval(ldThresh), 
@@ -196,7 +197,7 @@ initFiles <- function(pattern = "Chrom", snpInfoDir, snpListDir, signalFile, ldT
     cat("All files are ready for chromosome:\n  ")
     resParallel <- mclapply2(X = seq(22), mc.cores = min(22, mc.cores), FUN = function(jChr){
         newPattern <- unlist(strsplit(grep(paste(pattern, jChr, ".*.bim", sep = ""), FILES, value = TRUE), ".bim"))[1]
-        .writeSignal(pattern = newPattern, snpInfoDir = snpInfoDir, snpListDir = snpListDir, signalFile = signalFile)
+        .writeSignal(pattern = newPattern, snpInfoDir = snpInfoDir, signalFile = signalFile)
         .writeFreq(pattern = newPattern, snpInfoDir = snpInfoDir)
         if (LD) {
             if (Sys.info()[["sysname"]] == "Linux") {
@@ -327,6 +328,7 @@ initFiles <- function(pattern = "Chrom", snpInfoDir, snpListDir, signalFile, ldT
     } else {
         temp <- unique(snpSignal[, c("SNP", "PVALUE", "CHR", "POS", "MAF", "eSNP")])
         data <- transform(temp, SNP = as.character(temp$SNP), PVALUE = as.numeric(temp$PVALUE), CHR = as.numeric(temp$CHR), POS = as.numeric(temp$POS), MAF = as.numeric(temp$MAF), eSNP = as.numeric(temp$eSNP))
+        signalLoss <- c(NA, NA, length(unique(data[, "SNP"])), length(unique(data[!is.na(data[, "PVALUE"]), "SNP"])), length(unique(data[!is.na(data[, "PVALUE"]), "SNP"])))
     }
     data[, "xSNP"] <- 0
     if (any(duplicated(data[, "SNP"]))) {
@@ -626,7 +628,6 @@ readEnrichment <- function(pattern = "Chrom", signalFile, transcriptFile = FALSE
     } else {
         data <- DATA[DATA[, "SNP"] %in% eList, ]
     }
-
     
     data[, "MAFpool"] <- NA
     data[, "MAFpool"] <- as.factor(cut(data[, "MAF"], breaks = MAFpool, labels = FALSE, include.lowest = TRUE))

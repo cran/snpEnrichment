@@ -450,8 +450,8 @@ flush(stderr()); flush(stdout())
 # signalFile <- "./extData/Signal/toySignal.txt"
 # snpInfoDir <- "./extData/snpInfo/"
 # snpListDir <- "./extData/List/"
-# writeLD(pattern = "Chrom", snpInfoDir, snpListDir,
-#         signalFile, ldThresh = 0.8, onlySignal = TRUE, 
+# writeLD(pattern = "Chrom", snpInfoDir, signalFile, 
+#         ldThresh = 0.8, onlySignal = TRUE, 
 #         mc.cores = detectCores())
 ## End (Not run)
 

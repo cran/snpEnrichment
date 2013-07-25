@@ -10,15 +10,14 @@ Linkage Disequilibrium (LD) computation with PLINK
 }
 
 \usage{
-writeLD(pattern = "Chrom", snpInfoDir, snpListDir, 
-        signalFile, ldThresh = 0.8, onlySignal = TRUE,
+writeLD(pattern = "Chrom", snpInfoDir, signalFile, 
+        ldThresh = 0.8, onlySignal = TRUE,
         mc.cores = detectCores())
 }
 
 \arguments{
     \item{pattern}{[character]: character string containing a expression to be matched with all chromosomes files (e.g."Chrom" for  files which start by "Chrom" followed by the chromosome number).}
     \item{snpInfoDir}{[character]: character string naming a directory containing the reference data in a PLINK format (*.bed, *.bim and *.fam).}
-    \item{snpListDir}{[character]: character string naming a directory containing a list of SNPs for each chromosomes.}
     \item{signalFile}{[character]: the name of the signal file which the data are to be read from (2 columns: "SNP" and "PVALUE"). 
     Each row of the table appears as one line of the file.
     If it does not contain an \code{_absolute_} path, the file name is \code{_relative_} to the current working directory, \code{getwd}.
@@ -64,8 +63,8 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 # signalFile <- "./extData/Signal/toySignal.txt"
 # snpInfoDir <- "./extData/snpInfo/"
 # snpListDir <- "./extData/List/"
-# writeLD(pattern = "Chrom", snpInfoDir, snpListDir,
-#         signalFile, ldThresh = 0.8, onlySignal = TRUE, 
+# writeLD(pattern = "Chrom", snpInfoDir, signalFile, 
+#         ldThresh = 0.8, onlySignal = TRUE, 
 #         mc.cores = detectCores())
 ## End (Not run)
 }

@@ -578,6 +578,7 @@ setMethod(f = "reSample", signature = "Enrichment", definition = function(object
             nSample = 10
             warning('[Enrichment:reSample] nSample was increased to 100', call. = FALSE)
         } else {}
+        cat("########### Resample Enrichment ############\n")
         nSampleOld <- object@Parameters$reSample$nSample
         listRes <- eval(parse(text = paste("list(", paste(paste("Chrom", seq(22), " = NULL",  sep = ""), collapse = ", "), ")", sep = "")))
         for (iChr in seq(22)) {
@@ -620,6 +621,7 @@ setMethod(f = "reSample", signature = "Enrichment", definition = function(object
     
         nameObject <- deparse(argsSNP[[1]])
         assign(nameObject, result, envir = parent.frame())
+        cat("######## Resample Enrichment Done ##########\n")
         return(invisible())
     } else {
         stop('[Enrichment:reSample] "Enrichment" object is required', call. = FALSE)

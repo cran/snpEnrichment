@@ -1,10 +1,10 @@
-229cd0257b77c73afb74763981913ce9 *ChangeLog
-6468432f35f8ebccac23119d974bd131 *DESCRIPTION
+0944e96fcd9759d7b8663623878227a8 *ChangeLog
+06ad275b740edb367cb5805f4829fa6a *DESCRIPTION
 ce3ed1d2cfd98540cef5c345d9817e2b *NAMESPACE
-66b257ef06503e88cd025287533ef377 *R/Global.R
+8e356ae1aed8ba626ce6239890545934 *R/Global.R
 be69bff402b1d7d09f213933faa701df *R/SNP.R
 5655dbded99fb8638e7f53b00413a2c7 *R/chromosome.R
-b552d4b7c43daa4638ddde0f95328c5a *R/enrichment.R
+d099272ec0399738226a1f6c17aeabfe *R/enrichment.R
 7c0bbb22eee811ca425f1ae2e1000f28 *data/datalist
 88b758dedbc510da5597c98d2f900e37 *data/toyM1.RData
 ba09622ea17f454390c067fda95561c1 *data/toyM2.RData
@@ -109,7 +109,7 @@ ae9021b55ddc3fc361e6b66145aa3acd *man/initFiles.Rd
 c38125dcf57c7182b07a65fc0b22154a *man/is.chromosome.Rd
 d7bdedb9622208cda77393701d9338b1 *man/is.enrichment.Rd
 df8e8d38f0dab23fb9ab8ac8af17f017 *man/mclapply2.Rd
-7455d19a14e79a8d6b0f5f2ac0fc6982 *man/plot-methods.Rd
+81d745702525d2bee445c32eaf59672c *man/plot-methods.Rd
 925781306a183a3fdf50c7f194072447 *man/reSample-methods.Rd
 0f5ef3722ea80feaa9a586e7e7a8113f *man/readEnrichment.Rd
 2bafe1c3265ac895d2584bfe23190aed *man/snpEnrichment-internal.Rd
@@ -118,6 +118,6 @@ df8e8d38f0dab23fb9ab8ac8af17f017 *man/mclapply2.Rd
 dc12977fa11a982197a8d60481a5d4e6 *man/toyM1-dataset.Rd
 cb39d798a0e8f21363d78ca20a5dd780 *man/toyM2-dataset.Rd
 4e1b35d6aa97c6fcad969300185cb066 *man/transcript-dataset.Rd
-a8adc1419f3452eee9eb85bcd297389c *man/writeLD.Rd
-ea3272079bef32ab92f3c72741440485 *snpEnrichment-Ex.R
+a0369303d77404ab04c48a23a0437787 *man/writeLD.Rd
+b03707a2610c5aa5b56d2bd7a423bbd5 *snpEnrichment-Ex.R
 771dbf2595e4913741c9a7590ce9f601 *testDev/testToy.R
