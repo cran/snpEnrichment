@@ -39,7 +39,7 @@ If \code{complete=TRUE}, return a \code{data.frame} (\code{extended=FALSE}) or a
 
 \seealso{
 Overview : \code{\link{snpEnrichment-package}} \cr
-Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{SNP}} \cr
+Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{EnrichSNP}} \cr
 Methods :  \code{\link{plot}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
             \code{\link{enrichment}}, \code{\link{is.enrichment}}, \code{\link{chromosome}}, \code{\link{is.chromosome}} \cr
 Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnrichment}}
@@ -47,12 +47,10 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 
 \author{Mickael Canouil \email{mickael.canouil@good.ibl.fr}}
 
-\keyword{snpEnrichment}
-\keyword{Enrichment}
 \keyword{summary}
 \keyword{methods}
 
 \examples{
-data(toyM1)
-summary(toyM1)
+data(toyEnrichmentM1)
+summary(toyEnrichmentM1)
 }

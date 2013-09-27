@@ -1,5 +1,6 @@
 \name{snpEnrichment-internal}
 \alias{.verbose}
+\alias{.cleanTmpDir}
 \alias{.showArgs}
 \alias{.showArgs}
 \alias{.writeSignal}
@@ -18,20 +19,22 @@
 \alias{.enrichmentRatio}
 \alias{.reSample}
 \alias{.compareEnrich}
-\alias{.SNP.show}
+\alias{.EnrichSNP.show}
 \alias{.Chromosome.show}
 \alias{.Enrichment.show}
 
-\alias{newSNP}
-\alias{newSNP-methods}
-\alias{newSNP,ANY-method}
+\alias{enrichSNP}
+\alias{enrichSNP-methods}
+\alias{enrichSNP,ANY-method}
 
-\alias{is.SNP}
-\alias{is.SNP-methods}
-\alias{is.SNP,ANY-method}
+\alias{is.EnrichSNP}
+\alias{is.EnrichSNP-methods}
+\alias{is.EnrichSNP,ANY-method}
 
 \alias{reset}
 \alias{reset-methods}
+\alias{reset,EnrichSNP-method}
+\alias{reset,EnrichSNP,ANY-method}
 \alias{reset,Chromosome-method}
 \alias{reset,Chromosome,ANY-method}
 \alias{reset,Enrichment-method}
@@ -56,7 +59,7 @@ If you have a specific need or for more details on snpEnrichment, feel free to c
 
 \seealso{
 Overview : \code{\link{snpEnrichment-package}} \cr
-Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{SNP}} \cr
+Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{EnrichSNP}} \cr
 Methods :  \code{\link{plot}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
             \code{\link{enrichment}}, \code{\link{is.enrichment}}, \code{\link{chromosome}}, \code{\link{is.chromosome}} \cr
 Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnrichment}}
@@ -64,4 +67,6 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 
 \author{Mickael Canouil \email{mickael.canouil@good.ibl.fr}}
 
+\keyword{snpEnrichment}
 \keyword{internal}
+\keyword{Enrichment}

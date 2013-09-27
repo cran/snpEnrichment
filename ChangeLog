@@ -1,3 +1,63 @@
+2013-09-27 Mickael Canouil
+        * DESCRIPTION: version is 1.2-3
+        * man/EnrichSNP-class.Rd: Add alias for method '[' and '[' with signature = 'EnrichSNP,ANY,ANY,ANY'.
+        * man/Chromosome-class.Rd: Add alias for method '[' and '[' with signature = 'Chromosome,ANY,ANY,ANY'.
+        * man/Enrichment-class.Rd: Add alias for method '[' and '[' with signature = 'Enrichment,ANY,ANY,ANY'.
+        * R/Global.R: Now use 'read.plink', 'col.summary', 'ld' from 'snpStats' package for read plink files and compute MAF and LD.
+        * R/Enrichment.R: Fix 'show' method in order to deal with new parameters in 'readEnrichment' and 'reSample' functions.
+        * R/*.R: Change default setting for 'mc.cores' to 1.
+        * man/*.Rd: Update documentations files according to R code modification.
+
+2013-09-23 Mickael Canouil
+        * DESCRIPTION: version is 1.2-2
+        * R/*.R: Change name of 'SNP' class to 'EnrichSNP'.
+        * R/*.R: Some improvements and computation time optimisations.
+        * R/Global.R: Add 'ldDir' parameter in 'writeLD' which allow to choose the directory where LD files should be written.
+        * R/Global.R: Add 'ldDir' parameter in 'readEnrichment'.
+        * R/Global.R: 'initFiles' now write and clean tempory files used by 'readEnrichment'.
+        * R/Global.R: Now LD is only computed by 'writeLD'. Not anymore by 'initFiles'.
+        * R/Global.R: Remove 'ldThresh' and 'LD' parameters from 'initFiles'.
+        * R/Global.R: Remove 'signalFile', 'transcriptFile', 'snpInfoDir', 'distThresh', 'LD', 
+            'ldThresh', 'sigThresh', 'MAFpool' and 'extendMethod' parameters from 'compareEnrichment'.
+        * R/enrichment.R: Remove 'signalFile', 'transcriptFile', 'snpInfoDir', 'distThresh', 'LD', 
+            'ldThresh', 'sigThresh', 'MAFpool' and 'extendMethod' parameters from 'compareEnrichment'.
+        * R/enrichment.R: Fix issue for the whole genome convergence plot in 'plot' methods. Add parameter 'onlyGenome'.
+        * man/*.Rd: Update documentations files according to R code modification.
+
+2013-09-20 Mickael Canouil
+        * DESCRIPTION: version is 1.2-1
+        * R/*-class.R: Add 'print' methods (same as 'show').
+        * R/Global.R: Add error messages when files can not be created by 'initFiles'.
+        * R/Global.R: Remove 'require(parallel)' from 'mclapply2' function.
+        * exdata/*: Move all external data to 'inst' directory in order to be used in examples.
+        * man/*.Rd: Update documentations files according to R code modification.
+
+2013-09-19 Mickael Canouil
+        * DESCRIPTION: version is 1.2-0
+        * R/enrichment.R: Add 'onlyGenome' parameter, which allow to compute the resampling step at chromosome level and genome or only at genome level.
+        * R/enrichment.R: Fix 'plot' methods for low number of resampling.
+        * R/enrichment.R: Change 'Parameters' to "Call". 
+        * R/enrichment.R: 'show' is available for 'Call' slot.
+        * R/enrichment.R: Remove 'sigThresh' and 'extendMethod' parameters from "reSample" method with 'signature="Enrichment"'.
+        * R/enrichment.R: Remove 'sigThresh' and 'extendMethod' parameters from "excludeSNP" methods.
+        * R/enrichment.R: Fix abscisse according to 'nSample'. Abscisse origin is now equal to three.
+        * R/enrichment.R: 'chrNumber' is replaced by 'chr', in 'plot' method for 'Enrichment' object.
+        * R/Global.R: Fix bug in 'compareEnrichment' when some fields were not reseted with the option 'onlyGenome=TRUE'.
+        * R/Global.R: Remove 'onlySignal' parameter from 'writeLD' function.
+        * R/Global.R: Change 'Parameters' to "Call".
+        * R/Global.R: Remove 'sigThresh' and 'extendMethod' parameters from "excludeSNP" methods.
+        * NAMESPACE: Fix 'NAMESPACE' with missing 'SNP' class and methods.
+        * data/*: Generate new toy datasets.
+        * extdata/*: Generate new external datasets (iles needed to run the examples for the packages functions).
+        * man/*.Rd: Update documentations files according to R code modification.
+
+2013-08-27 Mickael Canouil
+        * DESCRIPTION: version is 1.1-4
+        * R/enrichment.R: Now results from method 'compareEnrichment' are the enrichment object and the summary table.
+        * R/enrichment.R: 'nSample' in 'excludeSNP' can be equal to 0.
+        * R/Global.R: 'maxCores' return at least 1.
+        * R/mclapply2.R: run in parallel mode with at least 1 core.
+
 2013-07-25 Mickael Canouil
         * DESCRIPTION: version is 1.1-3
         * R/Global.R: Some improvements and changes of functions: 'initFiles', '.writeSignal', 'writeLD'.

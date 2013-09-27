@@ -10,9 +10,8 @@ Linkage Disequilibrium (LD) computation with PLINK
 }
 
 \usage{
-writeLD(pattern = "Chrom", snpInfoDir, signalFile, 
-        ldThresh = 0.8, onlySignal = TRUE,
-        mc.cores = detectCores())
+writeLD(pattern = "Chrom", snpInfoDir, signalFile, ldDir = NULL, 
+        ldThresh = 0.8, mc.cores = 1)
 }
 
 \arguments{
@@ -22,27 +21,25 @@ writeLD(pattern = "Chrom", snpInfoDir, signalFile,
     Each row of the table appears as one line of the file.
     If it does not contain an \code{_absolute_} path, the file name is \code{_relative_} to the current working directory, \code{getwd}.
     The fields separator character have to be a space \code{" "} or a tabulation \code{"\\t"}.}
+    \item{ldDir}{[character]: character string naming a directory where the linkage Disequilibrium files should be written (default \code{ldDir=NULL} is in temporary directory).}
     \item{ldThresh}{[numeric]: threshold  value for LD calculation (PLINK).}
-    \item{onlySignal}{[logical]: \code{onlySignal=TRUE} (default) to compute LD for SNPs in signal (\code{signalFile}). 
-    Otherwise \code{onlySignal=FALSE} to compute linkage disequilibrium for all SNPs in reference data (\code{snpInfoDir}).}
-    \item{mc.cores}{[numeric]: The number of cores to use, i.e. at most how many child processes will be run simultaneously. 
-    The option is initialized with \code{detectCores}. 
+    \item{mc.cores}{[numeric]: The number of cores to use (default is \code{mc.cores=1}), i.e. at most how many child processes will be run simultaneously. 
     Must be at least one, and parallelization requires at least two cores.}
 }
 
 % \details{}
 
 \value{
-One ".ld" file by chromosome is returned by \code{\link{writeLD}} in \code{snpInfoDir} directory.
+One ".ld" file per chromosome is returned by \code{\link{writeLD}} in \code{snpInfoDir} directory.
 }
 
 \note{
-The LD computation can take a long time depending on number of SNPs in \code{signalFile}.
+The LD computation can take a long time depending on number of SNPs in \code{signalFile}. It is recommended to save LD results in a directory (\code{ldDir}) which is not a temporary directory.
 }
 
 \seealso{
 Overview : \code{\link{snpEnrichment-package}} \cr
-Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{SNP}} \cr
+Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{EnrichSNP}} \cr
 Methods :  \code{\link{plot}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
             \code{\link{enrichment}}, \code{\link{is.enrichment}}, \code{\link{chromosome}}, \code{\link{is.chromosome}} \cr
 Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnrichment}}
@@ -50,21 +47,17 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 
 \author{Mickael Canouil \email{mickael.canouil@good.ibl.fr}}
 
-\keyword{Enrichment}
 \keyword{initFiles}
-\keyword{LD}
-\keyword{ld}
-\keyword{linkage}
-\keyword{Disequilibrium}
-\keyword{PLINK}
+\keyword{Enrichment}
 
 \examples{
-## Not run:
-# signalFile <- "./extData/Signal/toySignal.txt"
-# snpInfoDir <- "./extData/snpInfo/"
-# snpListDir <- "./extData/List/"
-# writeLD(pattern = "Chrom", snpInfoDir, signalFile, 
-#         ldThresh = 0.8, onlySignal = TRUE, 
-#         mc.cores = detectCores())
-## End (Not run)
+\dontrun{
+signalFile <- system.file("extdata/Signal/toySignal.txt", 
+                          package = "snpEnrichment")
+snpInfoDir <- system.file("extdata/snpInfo", 
+                          package = "snpEnrichment")
+snpListDir <- system.file("extdata/List", 
+                          package = "snpEnrichment")
+writeLD(pattern = "Chrom", snpInfoDir, signalFile, ldDir = NULL, 
+        ldThresh = 0.8, mc.cores = 1)}
 }

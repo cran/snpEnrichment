@@ -7,16 +7,16 @@
 setClass(
     Class = "Chromosome", 
     representation = representation(
-        Data = "data.frame",
-        LD = "character",
-        eSNP = "SNP", 
-        xSNP = "SNP" 
+        Data = "data.frame", 
+        LD = "character", 
+        eSNP = "EnrichSNP", 
+        xSNP = "EnrichSNP" 
     ), 
     prototype = prototype(
-        Data = data.frame(),
-        LD = character(),
-        eSNP = newSNP(), 
-        xSNP = newSNP() 
+        Data = data.frame(), 
+        LD = character(), 
+        eSNP = enrichSNP(), 
+        xSNP = enrichSNP() 
     )
 )
 
@@ -24,14 +24,19 @@ setClass(
 setMethod(f = "chromosome", signature = "ANY", definition = function(Data, LD, eSNP, xSNP){
     if (missing(Data)) {
         Data <- data.frame()
-        if (missing(eSNP)) {eSNP <- xSNP <- newSNP()} else {}
+        if (missing(eSNP)) {
+            eSNP <- enrichSNP()
+            xSNP <- enrichSNP()
+        } else {}
     } else {
         if (missing(eSNP)) {
-            eSNP <- newSNP(List = Data[Data[, "eSNP"] == 1, "SNP"])
-            xSNP <- newSNP(List = Data[Data[, "xSNP"] == 1, "SNP"])
+            eSNP <- enrichSNP(List = Data[Data[, "eSNP"] == 1, "SNP"])
+            xSNP <- enrichSNP(List = Data[Data[, "xSNP"] == 1, "SNP"])
         } else {}
     }
-    if (missing(LD)) {LD <- character()} else {}
+    if (missing(LD)) {
+        LD <- character()
+    } else {}
     return(new("Chromosome", Data = Data, LD = LD, eSNP = eSNP, xSNP = xSNP))
 })
 
@@ -61,12 +66,12 @@ setMethod(f = "summary", signature = "Chromosome", definition = function(object,
     }
     res <- list(eSNP = NULL, xSNP = NULL)
     for (type in ExtendType) {
-        EnrichmentRatio <- eval(parse(text = paste('object@', type,'@EnrichmentRatio', sep = "")))
-        Z <- eval(parse(text = paste('object@', type,'@Z', sep = "")))
-        PValue <- eval(parse(text = paste('object@', type,'@PValue', sep = "")))
-        Resampling <- eval(parse(text = paste('nrow(object@', type,'@Resampling)', sep = "")))
-        Data <- eval(parse(text = paste('nrow(object@Data)', sep = "")))
-        List <- eval(parse(text = paste('length(object@', type,'@List)', sep = "")))
+        EnrichmentRatio <- eval(parse(text = paste0('object@', type, '@EnrichmentRatio')))
+        Z <- eval(parse(text = paste0('object@', type, '@Z')))
+        PValue <- eval(parse(text = paste0('object@', type, '@PValue')))
+        Resampling <- eval(parse(text = paste0('nrow(object@', type, '@Resampling)')))
+        Data <- eval(parse(text = paste0('nrow(object@Data)')))
+        List <- eval(parse(text = paste0('length(object@', type, '@List)')))
         resTmp <- c(if (length(EnrichmentRatio)==0) {NA} else {EnrichmentRatio}, 
                     if (length(Z)==0) {NA} else {Z}, 
                     if (length(PValue)==0) {NA} else {PValue}, 
@@ -86,7 +91,7 @@ setMethod(f = "summary", signature = "Chromosome", definition = function(object,
 
 
 .Chromosome.show <- function(object){
-    cat("  ~ Data :", paste("(", paste(dim(object@Data), collapse = "x"), ")", sep=""))
+    cat("  ~ Data :", paste0("(", paste(dim(object@Data), collapse = "x"), ")"))
         nrowShow <- min(5 , nrow(object@Data))
         ncolShow <- min(10 , ncol(object@Data))
         if (nrow(object@Data) != 0) {
@@ -96,15 +101,16 @@ setMethod(f = "summary", signature = "Chromosome", definition = function(object,
         } else {
             cat(" NA\n")
         }
-    # cat("\n  ~ LD :", paste("(", length(object@LD), ")", sep = ""), if (length(object@LD) <= 5) {if (length(object@LD) == 0) {"NA"} else {object@LD}} else {paste(paste(object@LD[seq(5)], collapse = " "), "...")})
+    # cat("\n  ~ LD :", paste0("(", length(object@LD), ")"), if (length(object@LD) <= 5) {if (length(object@LD) == 0) {"NA"} else {object@LD}} else {paste(paste(object@LD[seq(5)], collapse = " "), "...")})
     cat("\n  ~ eSNP :")
-        .SNP.show(object@eSNP)
+        .EnrichSNP.show(object@eSNP)
     cat("\n  ~ xSNP :")
-        .SNP.show(object@xSNP)
+        .EnrichSNP.show(object@xSNP)
     cat("\n")
     return(invisible())
 }
 setMethod(f = "show", signature = "Chromosome", definition = function(object){cat("     ~~~ Class:", class(object), "~~~\n"); .Chromosome.show(object)})
+setMethod(f = "print", signature = "Chromosome", definition = function(x, ...){cat("     ~~~ Class:", class(x), "~~~\n"); .Chromosome.show(x)})
 
 
 setMethod(f = "[", signature = "Chromosome", definition = function(x, i, j, drop){
@@ -132,7 +138,7 @@ setMethod(f = "[<-", signature = "Chromosome", definition = function(x, i, j, va
 })
 
 
-setMethod(f = "computeER", signature = "Chromosome", definition = function(object, sigThresh = 0.05, mc.cores = detectCores()) {
+setMethod(f = "computeER", signature = "Chromosome", definition = function(object, sigThresh = 0.05, mc.cores = 1) {
     if (!missing(object)) {
         object@Chromosomes <- mclapply2(object@Chromosomes, mc.cores = mc.cores, function(chr){
             data <- chr@Data
@@ -141,8 +147,8 @@ setMethod(f = "computeER", signature = "Chromosome", definition = function(objec
                 if (!(chrLD == 0 & type == "xSNP")) {
                     snpEnrich <- table(factor(chr@Data[, "PVALUE"]<sigThresh, levels = c(FALSE, TRUE)), factor(chr@Data[, type], levels = c(0, 1)))
                     colnames(snpEnrich) <- c("otherSNP", type)
-                    rownames(snpEnrich) <- eval(parse(text=paste('c("P>=', sigThresh, '", "P<', sigThresh, '")', sep="")))
-                    chr[type] <- newSNP(List = chr[type]@List, Table = unclass(snpEnrich), EnrichmentRatio = .enrichmentRatio(snpEnrich))
+                    rownames(snpEnrich) <- eval(parse(text = paste0('c("P>=', sigThresh, '", "P<', sigThresh, '")')))
+                    chr[type] <- enrichSNP(List = chr[type]@List, Table = unclass(snpEnrich), EnrichmentRatio = .enrichmentRatio(snpEnrich))
                 } else {}
             }
             return(chr)
@@ -155,7 +161,7 @@ setMethod(f = "computeER", signature = "Chromosome", definition = function(objec
 })
 
 
-setMethod(f = "doLDblock", signature = "Chromosome", definition = function(object, mc.cores = detectCores()) {
+setMethod(f = "doLDblock", signature = "Chromosome", definition = function(object, mc.cores = 1) {
     if (!missing(object)) {
         data <- object@Data
 
@@ -164,10 +170,14 @@ setMethod(f = "doLDblock", signature = "Chromosome", definition = function(objec
         chrLD <- object@LD
         
         byBlock <- split(chrLD, names(chrLD))
-        byBlock <- unique(mclapply2(byBlock, mc.cores = nbCores, function(i) {names(i) <- NULL; return(i)}))
-        LDblock <- do.call("rbind", unique(mclapply2(seq(length(byBlock)), mc.cores = nbCores, function(jBlock) {
+        byBlock <- unique(mclapply2(byBlock, mc.cores = nbCores, function(i) {
+            names(i) <- NULL; return(i)
+        }))
+        LDblockTmp <- mclapply2(seq(length(byBlock)), mc.cores = nbCores, function(jBlock) {
             range(data[byBlock[[jBlock]], "POS"])
-        })))
+        })
+        LDblock <- do.call("rbind", unique(LDblockTmp))
+        rm(LDblockTmp)
         
         names(byBlock) <- NULL
         LDblock <- LDblock[order(LDblock[, 1]), ]
@@ -199,6 +209,7 @@ setMethod(f = "doLDblock", signature = "Chromosome", definition = function(objec
         }
         rm(LDblock)
         GC()
+        
         blockLim <- cbind(blockLim, seq(nrow(blockLim)))
         colnames(blockLim) <- c("MIN", "MAX", "IDBLOCK")
         rownames(blockLim) <- seq(nrow(blockLim))
@@ -208,6 +219,7 @@ setMethod(f = "doLDblock", signature = "Chromosome", definition = function(objec
             return(blockLim[li, ])
         })
         blockLim <- do.call("rbind", resParallel)
+        rm(resParallel)
 
         data <- data[order(data[, "POS"]), ]
         data[, c("MIN", "MAX", "IDBLOCK", "LENGTH", "MAFmedian")] <- NA
@@ -221,6 +233,8 @@ setMethod(f = "doLDblock", signature = "Chromosome", definition = function(objec
         })
 
         dataTmp <- do.call("rbind", tmpChr)
+        rm(tmpChr, blockLim)
+        
         missingData <- data[!data[, "SNP"]%in%dataTmp[, "SNP"], ]
         maxIDBLOCK <- max(dataTmp[, "IDBLOCK"])
         for (iRow in seq(nrow(missingData))) {
@@ -232,6 +246,7 @@ setMethod(f = "doLDblock", signature = "Chromosome", definition = function(objec
         }
 
         data <- rbind(missingData, dataTmp)
+        data <- data[!is.na(data[, "SNP"]), ]
         data <- data[order(data[, "POS"]), ]
         rownames(data) <- data[, "SNP"]
         object@Data <- data
@@ -243,11 +258,11 @@ setMethod(f = "doLDblock", signature = "Chromosome", definition = function(objec
 })
 
 
-setMethod(f = "reSample", signature = "Chromosome", definition = function(object, nSample = 100, sigThresh = 0.05, MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5), extendMethod = "ld", mc.cores = detectCores()) {
+setMethod(f = "reSample", signature = "Chromosome", definition = function(object, nSample = 100, sigThresh = 0.05, MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5), extendMethod = "ld", mc.cores = 1) {
     if (!missing(object)) {
         if (nSample<10) {
             nSample = 10
-            warning('[Enrichment:reSample] nSample was increased to 100', call. = FALSE)
+            warning('[Enrichment:reSample] nSample was increased to 10', call. = FALSE)
         } else {}
         result <- .reSample(object = object, nSample = nSample, sigThresh = sigThresh, MAFpool = MAFpool, extendMethod = extendMethod, mc.cores = mc.cores)
         return(result)
@@ -260,16 +275,48 @@ setMethod(f = "reSample", signature = "Chromosome", definition = function(object
 
 setMethod(f = "reset", signature = "Chromosome", definition = function(object, i) {
     switch(EXPR = i, 
-        "Data" = {object@Data <- data.frame()}, 
-        "LD" = {object@LD <- character()}, 
-        "eSNP" = {object@eSNP <- newSNP()}, 
-        "xSNP" = {object@xSNP <- newSNP()},
-        "List" = {for (type in c("eSNP", "xSNP")) {object[type]@List <- character()}}, 
-        "Table" = {for (type in c("eSNP", "xSNP")) {object[type]@Table <- matrix(0, ncol = 2, nrow = 2)}}, 
-        "EnrichmentRatio" = {for (type in c("eSNP", "xSNP")) {object[type]@EnrichmentRatio <- numeric()}}, 
-        "Z" = {for (type in c("eSNP", "xSNP")) {object[type]@Z <- numeric()}}, 
-        "PValue" = {for (type in c("eSNP", "xSNP")) {object[type]@PValue <- numeric()}}, 
-        "Resampling" = {for (type in c("eSNP", "xSNP")) {object[type]@Resampling <- matrix(0, ncol = 0, nrow = 0)}}, 
+        "Data" = {
+            object@Data <- data.frame()
+        }, 
+        "LD" = {
+            object@LD <- character()
+        }, 
+        "eSNP" = {
+            object@eSNP <- enrichSNP()
+        }, 
+        "xSNP" = {
+            object@xSNP <- enrichSNP()
+        }, 
+        "List" = {
+            for (type in c("eSNP", "xSNP")) {
+                object[type]@List <- reset(object[type], "List")
+            }
+        }, 
+        "Table" = {
+            for (type in c("eSNP", "xSNP")) {
+                object[type]@Table <- matrix(0, ncol = 2, nrow = 2)
+            }
+        }, 
+        "EnrichmentRatio" = {
+            for (type in c("eSNP", "xSNP")) {
+                object[type]@EnrichmentRatio <- numeric()
+            }
+        }, 
+        "Z" = {
+            for (type in c("eSNP", "xSNP")) {
+                object[type]@Z <- numeric()
+            }
+        }, 
+        "PValue" = {
+            for (type in c("eSNP", "xSNP")) {
+                object[type]@PValue <- numeric()
+            }
+        }, 
+        "Resampling" = {
+            for (type in c("eSNP", "xSNP")) {
+                object[type]@Resampling <- matrix(0, ncol = 5, nrow = 0)
+            }
+        }, 
         stop('[Enrichment:reset] ', i, ' is not a "Enrichment" slot', call. = FALSE)
     )
     return(object)

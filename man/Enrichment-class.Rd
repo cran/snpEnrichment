@@ -3,12 +3,15 @@
 \alias{Enrichment-class}
 \alias{Enrichment}
 \alias{[,Enrichment-method}
+\alias{[,Enrichment,ANY,ANY,ANY-method}
 \alias{[<-,Enrichment-method}
+\alias{[<-,Enrichment,ANY,ANY,ANY-method}
 % \alias{computeER,Enrichment-method}
 % \alias{excludeSNP,Enrichment-method}
 % \alias{reSample,Enrichment-method}
 % \alias{reset,Enrichment-method}
 \alias{show,Enrichment-method}
+% \alias{print,Enrichment-method}
 % \alias{summary,Enrichment-method}
 \alias{enrichment}
 \alias{enrichment-methods}
@@ -37,27 +40,28 @@ This class is defined to summarize the enrichment analysis on each chromosomes a
     \describe{
         % \item{Signal}{[data.frame]: a three columns \code{data.frame}: "SNP", "PVALUE" and "IN" (e.g. GWAS). "IN" is computed during the reading step and gives informations about which SNPs are kept for the enrichment analysis.}
         \item{Loss}{[data.frame]: a four columns \code{data.frame}: "Rows", "Unique", "Intersect.Ref.Signal" and "CIS". This slot gives information on data losses.}
-        \item{Parameters}{[list]: each parameters used for the reading or resampling step are stored in this slot.}
-        \item{eSNP, xSNP}{[SNP]: contain a \code{\linkS4class{SNP}} object (whith slots: SNP, Table, EnrichmentRatio, Z, PValue and Resampling) for a list of SNPs (\code{eSNP}) and an extended one (\code{xSNP}).}
-        % \item{xSNP}{[SNP]: contains a \code{\linkS4class{SNP}} object (whith slots: SNP, Table, EnrichmentRatio, Z, PValue and Resampling) for an extended list of SNPs.}
+        \item{Call}{[list]: each parameters used for the reading or resampling step are stored in this slot.}
+        \item{eSNP, xSNP}{[SNP]: contain a \code{\linkS4class{EnrichSNP}} object (whith slots: SNP, Table, EnrichmentRatio, Z, PValue and Resampling) for a list of SNPs (\code{eSNP}) and an extended one (\code{xSNP}).}
+        % \item{xSNP}{[SNP]: contains a \code{\linkS4class{EnrichSNP}} object (whith slots: SNP, Table, EnrichmentRatio, Z, PValue and Resampling) for an extended list of SNPs.}
         \item{Chromosomes}{[list(Chromosome)]: a list of 22 \code{\linkS4class{Chromosome}} objects.}
     }
 }
 
 \section{Extends}{
 Class \code{\linkS4class{Chromosome}}, directly.\cr
-Class \code{\linkS4class{SNP}}, directly.\cr
+Class \code{\linkS4class{EnrichSNP}}, directly.\cr
 }
 
 \section{Methods}{
     \describe{
-        \item{enrichment(Loss, Parameters, eSNP, xSNP, Chromosomes):}{Generate and initialize a new \code{\linkS4class{Enrichment}} object.}
+        \item{enrichment(Loss, Call, eSNP, xSNP, Chromosomes):}{Generate and initialize a new \code{\linkS4class{Enrichment}} object.}
         \item{object["slotName"]:}{Get the value of the field \code{slotName}.}
         \item{object["slotName"]<-value:}{Set \code{value} to the field \code{slotName}.}
         \item{show(object):}{Return the formatted values of \code{\linkS4class{Enrichment}} object.}
+        % \item{print(object):}{Return the formatted values of \code{\linkS4class{Enrichment}} object.}
         % \item{computeER(object, sigThresh):}{Compute Enrichment Ratio for \code{\linkS4class{Enrichment}} object (internal use only).}
-        \item{reSample(object, nSample, sigThresh, MAFpool, extendMethod, mc.cores):}{Compute P-Values based upon a resampling of SNPs (\code{eSNP} and \code{xSNP}) and update an \code{\linkS4class{Enrichment}} object.}
-        \item{excludeSNP(object, excludeFile, nSample, sigThresh, MAFpool, extendMethod, mc.cores):}{Excludes SNPs given in \code{excludeFile} from the original list of eSNPs (xSNPs). Then a new enrichment analysis is computed.}
+        \item{reSample(object, nSample, MAFpool, mc.cores, onlyGenome):}{Compute P-Values based upon a resampling of SNPs (\code{eSNP} and \code{xSNP}) and update an \code{\linkS4class{Enrichment}} object.}
+        \item{excludeSNP(object, excludeFile, mc.cores):}{Excludes SNPs given in \code{excludeFile} from the original list of eSNPs (xSNPs). Then a new enrichment analysis is computed.}
         \item{summary(object, extended, complete):}{Return a list of \code{data.frame} which summarize enrichment analysis for \code{eSNP} and/or \code{xSNP}.
             \code{extended=TRUE} (default) to add \code{xSNP}.
             \code{complete=TRUE} (default) to add chromosomes results.}
@@ -69,7 +73,7 @@ Class \code{\linkS4class{SNP}}, directly.\cr
 
 \seealso{
 Overview : \code{\link{snpEnrichment-package}} \cr
-Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{SNP}} \cr
+Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{EnrichSNP}} \cr
 Methods : \code{\link{plot}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
             \code{\link{enrichment}}, \code{\link{is.enrichment}}, \code{\link{chromosome}}, \code{\link{is.chromosome}} \cr
 Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnrichment}}
@@ -80,46 +84,40 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 \keyword{classes}
 \keyword{class}
 \keyword{enrichment}
-\keyword{chromosome}
-\keyword{snp}
 
 \examples{
-data(toyM1)
+data(toyEnrichmentM1)
 toyEnrich <- enrichment()
 show(toyEnrich)
 
-toyEnrich["Loss"] <- toyM1["Loss"]
+toyEnrich["Loss"] <- toyEnrichmentM1["Loss"]
 toyEnrich["Loss"]
 
-toyEnrich <- enrichment(Loss = toyM1["Loss"], eSNP = toyM1["eSNP"])
-toyEnrich <- enrichment(Loss = toyM1["Loss"])
+toyEnrich <- enrichment(Loss = toyEnrichmentM1["Loss"], 
+                        eSNP = toyEnrichmentM1["eSNP"])
+toyEnrich <- enrichment(Loss = toyEnrichmentM1["Loss"])
 
-# reSample(object = toyM1, 
-#          nSample = 10, 
-#          sigThresh = 0.05, 
-#          MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
-#          extendMethod = "ld",
-#          mc.cores = detectCores())
-summary(toyM1)
+\dontrun{
+reSample(object = toyEnrichmentM1, 
+         nSample = 10, 
+         MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
+         mc.cores = 1,
+         onlyGenome = FALSE)
+summary(toyEnrichmentM1)
 
-# excludeFile <- c(
-    # "rs1561385", "rs7792796", "rs2514670", "rs9641913", "rs8184976",
-    # "rs17582442", "rs7690663", "rs4940941", "rs7069561", "rs540218",
-    # "rs17315714", "rs17795475", "rs7171423", "rs2392927", "rs12593911",
-    # "rs4150477", "rs11608342", "rs16998578", "rs4299828", "rs915865",
-    # "rs10976361", "rs7863276", "rs16908503", "rs544845", "rs1473462",
-    # "rs4757541", "rs7640480", "rs7121036", "rs6803546", "rs10851981",
-    # "rs4724502", "rs9540053", "rs10935849", "rs11193005", "rs6566417",
-    # "rs1693294", "rs12759271", "rs17718970", "rs4774717", "rs455839",
-    # "rs942278", "rs6545708", "rs7557832", "rs1498356", "rs11083318",
-    # "rs9595937", "rs1561476", "rs12188654", "rs2048839", "rs4689801"
-# )
-# toyM1_exclude <- excludeSNP(toyM1, 
-                            # excludeFile, 
-                            # nSample = 10, 
-                            # sigThresh = 0.05, 
-                            # MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
-                            # extendMethod = "ld",
-                            # mc.cores = detectCores())
-# summary(toyM1_exclude)
+excludeFile <- c(
+"rs7897180", "rs4725479", "rs315404", "rs17390391", "rs1650670",
+    "rs6783390", "rs1642009", "rs4756586", "rs11995037", "rs4977345",
+    "rs13136448", "rs4233536", "rs11151079", "rs2299657", "rs4833930",
+    "rs1384", "rs7168184", "rs6909895", "rs7972667", "rs2293229",
+    "rs918216", "rs6040608", "rs2817715", "rs13233541", "rs4486743",
+    "rs2127806", "rs10912854", "rs1869052", "rs9853549", "rs448658",
+    "rs2451583", "rs17483288", "rs10962314", "rs9612059", "rs1384182",
+    "rs8049208", "rs12215176", "rs2980996", "rs1736976", "rs8089268",
+    "rs10832329", "rs12446540", "rs7676237", "rs869922", "rs16823426",
+    "rs1374393", "rs13268781", "rs11134505", "rs7325241", "rs7520109"
+)
+
+toyM1_exclude <- excludeSNP(toyEnrichmentM1, excludeFile, mc.cores = 1)
+summary(toyM1_exclude)}
 }

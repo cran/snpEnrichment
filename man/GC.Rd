@@ -22,17 +22,17 @@ GC(verbose = getOption("verbose"), reset=FALSE)
 
 \value{
 \code{\link{GC}} returns a matrix with rows \code{"Ncells"} (_cons cells_), usually
- 28 bytes each on 32-bit systems and 56 bytes on 64-bit systems,
- and \code{"Vcells"} (_vector cells_, 8 bytes each), and columns
- \code{"used"} and \code{"gc trigger"}, each also interpreted in megabytes
- (rounded up to the next 0.1Mb).
+28 bytes each on 32-bit systems and 56 bytes on 64-bit systems,
+and \code{"Vcells"} (_vector cells_, 8 bytes each), and columns
+\code{"used"} and \code{"gc trigger"}, each also interpreted in megabytes
+(rounded up to the next 0.1Mb).
 
- If maxima have been set for either \code{"Ncells"} or \code{"Vcells"}, a
- fifth column is printed giving the current limits in Mb (with \code{NA}
- denoting no limit).
+If maxima have been set for either \code{"Ncells"} or \code{"Vcells"}, a
+fifth column is printed giving the current limits in Mb (with \code{NA}
+denoting no limit).
 
- The final two columns show the maximum space used since the last
- call to \code{GC(reset=TRUE)} (or since R started).
+The final two columns show the maximum space used since the last
+call to \code{GC(reset=TRUE)} (or since R started).
 }
 
 % \note{}
@@ -52,7 +52,7 @@ developer.
 \keyword{garbage}
 
 \examples{
-GC() #- do it now
+GC() # - do it now
 x <- integer(100000); for(i in 1:18) x <- c(x,i)
 GC(TRUE)
 GC(reset=TRUE)

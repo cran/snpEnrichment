@@ -20,9 +20,13 @@ After \code{\link{initFiles}} and \code{\link{readEnrichment}} has been run.
 }
 
 \usage{
-reSample(object, nSample = 100, sigThresh = 0.05, 
+\S4method{reSample}{Enrichment}(object, nSample = 100, 
          MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
-         extendMethod = "ld", mc.cores = detectCores())
+         mc.cores = 1, onlyGenome = FALSE)
+
+\S4method{reSample}{Chromosome}(object, nSample = 100, sigThresh = 0.05, 
+         MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
+         extendMethod = "ld", mc.cores = 1)
 }
 
 \arguments{
@@ -31,11 +35,11 @@ reSample(object, nSample = 100, sigThresh = 0.05,
     \item{sigThresh}{[numeric]: statistical threshold for signal (e.g. \code{sigThresh = 0.05} for a given GWAS signal) used to compute an Enrichment Ratio.}
     \item{MAFpool}{[vector(numeric)]: either a numeric vector giving the breaks points of intervals into which SNP's MAF (Minor Allele Frequency) is to be split.}
     \item{extendMethod}{[character]: character string naming the method to be used to extend the list of eSNPs. 
-    Default is "ld", the list of eSNPs is extended with all SNPs in LD (r^2 threshold, defined in \code{\link{initFiles}}).
+    Default is "ld", the list of eSNPs is extended with all SNPs in LD (r^2 threshold, defined in \code{\link{writeLD}}).
     Otherwise, "block", extends the list of eSNPs by defining LD blocks with LD measures and positions of SNPs on chromosomes.}
-    \item{mc.cores}{[numeric]: The number of cores to use, i.e. at most how many child processes will be run simultaneously. 
-    The option is initialized with \code{detectCores}. 
+    \item{mc.cores}{[numeric]: The number of cores to use (default is \code{mc.cores=1}), i.e. at most how many child processes will be run simultaneously. 
     Must be at least one, and parallelization requires at least two cores.}
+    \item{onlyGenome}{[logical]: \code{onlyGenome=FALSE} (default) compute resampling step for all chromosomes.}
 }
 
 % \details{}
@@ -48,7 +52,7 @@ Return the object given in argument, updated by the resampling results.
 
 \seealso{
 Overview : \code{\link{snpEnrichment-package}} \cr
-Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{SNP}} \cr
+Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{EnrichSNP}} \cr
 Methods :  \code{\link{plot}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
             \code{\link{enrichment}}, \code{\link{is.enrichment}}, \code{\link{chromosome}}, \code{\link{is.chromosome}} \cr
 Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnrichment}}
@@ -56,17 +60,15 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 
 \author{Mickael Canouil \email{mickael.canouil@good.ibl.fr}}
 
-\keyword{snpEnrichment}
-\keyword{Enrichment}
 \keyword{reSample}
 \keyword{methods}
 
 \examples{
-# data(toyM1)
-# reSample(object = toyM1, 
-         # nSample = 10, 
-         # sigThresh = 0.05, 
-         # MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5), 
-         # extendMethod = "ld", mc.cores = detectCores())
-# toyM1
+\dontrun{
+data(toyEnrichmentM1)
+reSample(object = toyEnrichmentM1, 
+         nSample = 10, 
+         MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5), 
+         onlyGenome = FALSE)
+toyEnrichmentM1}
 }

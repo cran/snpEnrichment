@@ -13,8 +13,8 @@ Read files created by \code{\link{initFiles}} and create an \code{\linkS4class{E
 readEnrichment(pattern = "Chrom", signalFile, 
                transcriptFile = "FALSE", snpListDir, 
                snpInfoDir, distThresh = 1000, 
-               sigThresh = 0.05, LD = "FALSE", 
-               extendMethod = "ld", mc.cores = detectCores())
+               sigThresh = 0.05, LD = FALSE, ldDir = NULL,
+               extendMethod = "ld", mc.cores = 1)
 }
 
 \arguments{
@@ -29,13 +29,13 @@ readEnrichment(pattern = "Chrom", signalFile,
     \item{snpInfoDir}{[character]: character string naming a directory containing the reference data in a PLINK format (*.bed, *.bim and *.fam).}
     \item{distThresh}{[numeric]: maximal distance (kb) between SNP and gene. \code{distThresh} is used if \code{transcriptFile} is set.}
     \item{sigThresh}{[numeric]: statistical threshold for signal (e.g. \code{sigThresh = 0.05} for a given GWAS signal) used to compute an Enrichment Ratio.}
-    \item{LD}{[logical]: \code{LD=TRUE} (default is \code{FALSE}) compute LD with PLINK.
+    \item{LD}{[logical]: \code{LD=TRUE} (default is \code{FALSE}) read LD compute with \code{\link{writeLD}} functions.
     Note that, this setting can increase the computation's time, depending on number of SNPs in the signal file.}
+    \item{ldDir}{[character]: character string naming a directory where the linkage Disequilibrium files should be written (default \code{ldDir=NULL} is in temporary directory).}
     \item{extendMethod}{[character]: character string naming the method to be used to extend the list of eSNPs. 
-    Default is "ld", the list of eSNPs is extended with all SNPs in LD (r^2 threshold, defined in \code{\link{initFiles}}).
+    Default is "ld", the list of eSNPs is extended with all SNPs in LD (r^2 threshold, defined in \code{\link{writeLD}}).
     Otherwise, "block", extends the list of eSNPs by defining LD blocks with LD measures and positions of SNPs on chromosomes.}
-    \item{mc.cores}{[numeric]: The number of cores to use, i.e. at most how many child processes will be run simultaneously. 
-    The option is initialized with \code{detectCores}. 
+    \item{mc.cores}{[numeric]: The number of cores to use (default is \code{mc.cores=1}), i.e. at most how many child processes will be run simultaneously. 
     Must be at least one, and parallelization requires at least two cores.}
 }
 
@@ -49,7 +49,7 @@ Return an object of class \code{\linkS4class{Enrichment}} partly filled.
 
 \seealso{
 Overview : \code{\link{snpEnrichment-package}} \cr
-Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{SNP}} \cr
+Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{EnrichSNP}} \cr
 Methods :  \code{\link{plot}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
             \code{\link{enrichment}}, \code{\link{is.enrichment}}, \code{\link{chromosome}}, \code{\link{is.chromosome}} \cr
 Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnrichment}}
@@ -57,27 +57,33 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 
 \author{Mickael Canouil \email{mickael.canouil@good.ibl.fr}}
 
-\keyword{enrichment}
+\keyword{readEnrichment}
 \keyword{initFiles}
 \keyword{writeLD}
 \keyword{initialize}
-\keyword{readEnrichment}
 
 \examples{
-## Not run:
-# snpListDir <- "./extData/List/"
-# signalFile <- "./extData/Signal/toySignal.txt"
-# excludeFile <- "./extData/Exclude/toyExclude.txt"
-# snpInfoDir <- "./extData/snpInfo/"
-# data(transcript)
-# transcriptFile <- transcript
+\dontrun{
+snpListDir <- system.file("extdata/List", 
+                          package = "snpEnrichment")
+signalFile <- system.file("extdata/Signal/toySignal.txt", 
+                          package = "snpEnrichment")
+excludeFile <- system.file("extdata/Exclude/toyExclude.txt", 
+                           package = "snpEnrichment")
+snpInfoDir <- system.file("extdata/snpInfo", package = "snpEnrichment")
+data(transcript)
+transcriptFile <- transcript
 
-# toy_M1 <- readEnrichment(pattern = "Chrom", signalFile, 
-#                          transcriptFile, snpListDir, 
-#                          snpInfoDir, distThresh = 1000, 
-#                          sigThresh = 0.05, LD = "FALSE", 
-#                          extendMethod = "ld", 
-#                          mc.cores = detectCores())
-# toy_M1
-## End (Not run)
+toy_M1 <- readEnrichment(pattern = "Chrom", 
+                         signalFile, 
+                         transcriptFile, 
+                         snpListDir, 
+                         snpInfoDir, 
+                         distThresh = 1000, 
+                         sigThresh = 0.05, 
+                         LD = FALSE, 
+                         ldDir = NULL, 
+                         extendMethod = "ld", 
+                         mc.cores = 1)
+toy_M1}
 }

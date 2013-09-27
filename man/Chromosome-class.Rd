@@ -3,12 +3,15 @@
 \alias{Chromosome-class}
 \alias{Chromosome}
 \alias{[,Chromosome-method}
+\alias{[,Chromosome,ANY,ANY,ANY-method}
 \alias{[<-,Chromosome-method}
+\alias{[<-,Chromosome,ANY,ANY,ANY-method}
 % \alias{computeER,Chromosome-method}
 % \alias{doLDblock,Chromosome-method}
 % \alias{reSample,Chromosome-method}
 % \alias{reset,Chromosome-method}
 \alias{show,Chromosome-method}
+% \alias{print,Chromosome-method}
 % \alias{summary,Chromosome-method}
 \alias{chromosome}
 \alias{chromosome-methods}
@@ -39,14 +42,14 @@ This class is defined to summarize the enrichment analysis about a chromosome.
 \section{Slots}{
     \describe{
         \item{Data}{[data.frame]: a \code{data.frame} with 6 columns ("SNP", "PVALUE", "CHR", "MAF", "eSNP", "xSNP"). Where "eSNP" and "xSNP" are logical columns defining the lists of SNPs (extended or not).}
-        \item{LD}{[data.frame]: a \code{data.frame} which contains LD informations between SNPs (computed with PLINK with a threshold defined by user).}
-        \item{eSNP, xSNP}{[SNP]: contain a \code{\linkS4class{SNP}} object (whith slots: SNP, Table, EnrichmentRatio, Z, PValue and Resampling) for a list of SNPs (\code{eSNP}) and an extended one (\code{xSNP}).}
-        % \item{xSNP}{[SNP]: contains a \code{\linkS4class{SNP}} object (whith slots: SNP, Table, EnrichmentRatio, Z, PValue and Resampling) for an extended list of SNPs.}
+        \item{LD}{[data.frame]: a \code{data.frame} which contains LD informations between SNPs (computed with \code{\link{writeLD}}).}
+        \item{eSNP, xSNP}{[SNP]: contain a \code{\linkS4class{EnrichSNP}} object (whith slots: SNP, Table, EnrichmentRatio, Z, PValue and Resampling) for a list of SNPs (\code{eSNP}) and an extended one (\code{xSNP}).}
+        % \item{xSNP}{[SNP]: contains a \code{\linkS4class{EnrichSNP}} object (whith slots: SNP, Table, EnrichmentRatio, Z, PValue and Resampling) for an extended list of SNPs.}
     }
 }
 
 \section{Extends}{
-Class \code{\linkS4class{SNP}}, directly.\cr
+Class \code{\linkS4class{EnrichSNP}}, directly.\cr
 }
 
 \section{Methods}{
@@ -55,10 +58,11 @@ Class \code{\linkS4class{SNP}}, directly.\cr
         \item{object["slotName"]:}{Get the value of the field \code{slotName}.}
         \item{object["slotName"]<-value:}{Set \code{value} to the field \code{slotName}.}
         \item{show(object):}{Return the formatted values of \code{\linkS4class{Chromosome}} object.}
+        % \item{print(object):}{Return the formatted values of \code{\linkS4class{Chromosome}} object.}
         % \item{computeER(object, sigThresh, mc.cores):}{Compute an Enrichment Ratio for \code{\linkS4class{Chromosome}} object (internal use only).}
         % \item{doLDblock(object, mc.cores):}{Compute LD block and update \code{Data} field (internal use only).}
         % \item{reSample(object, nSample, sigThresh, MAFpool, extendMethod, mc.cores):}{Compute P-Value based upon a resampling of SNPs (\code{eSNP} and \code{xSNP}) and update an \code{\linkS4class{Chromosome}} object.}
-        % \item{excludeSNP(object, excludeFile, nSample, sigThresh, MAFpool, extendMethod, mc.cores):}{Exclude SNPs from eSNPs list and xSNPs list and compute a new enrichment analysis.}
+        % \item{excludeSNP(object, excludeFile, nSample, MAFpool, mc.cores):}{Exclude SNPs from eSNPs list and xSNPs list and compute a new enrichment analysis.}
         % \item{summary(object, extended):}{Return a list of \code{data.frame} which summarize enrichment analysis for \code{eSNP} and/or \code{xSNP}. 
            % \code{extended=TRUE} (default) to add \code{xSNP}.}
         % \item{reset(object, "slotName"):}{Reset the field \code{slotName}.}
@@ -66,14 +70,14 @@ Class \code{\linkS4class{SNP}}, directly.\cr
 }
 
 \note{
-\code{\linkS4class{Chromosome}} object is not intended to be used alone on this version. 
+\code{\linkS4class{Chromosome}} object is not intended to be used alone on this version.\\
 It is a part of the \code{\linkS4class{Enrichment}} object.
 }
 
 
 \seealso{
 Overview : \code{\link{snpEnrichment-package}} \cr
-Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{SNP}} \cr
+Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{EnrichSNP}} \cr
 Methods :  \code{\link{plot}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
             \code{\link{enrichment}}, \code{\link{is.enrichment}}, \code{\link{chromosome}}, \code{\link{is.chromosome}} \cr
 Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnrichment}}
@@ -83,10 +87,7 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 
 \keyword{classes}
 \keyword{class}
-\keyword{methods}
-\keyword{method}
 \keyword{chromosome}
-\keyword{snp}
 
 \examples{
 Data <- structure(
