@@ -42,7 +42,7 @@ This class is defined to summarize the enrichment analysis about a chromosome.
 \section{Slots}{
     \describe{
         \item{Data}{[data.frame]: a \code{data.frame} with 6 columns ("SNP", "PVALUE", "CHR", "MAF", "eSNP", "xSNP"). Where "eSNP" and "xSNP" are logical columns defining the lists of SNPs (extended or not).}
-        \item{LD}{[data.frame]: a \code{data.frame} which contains LD informations between SNPs (computed with \code{\link{writeLD}}).}
+        \item{LD}{[data.frame]: a \code{data.frame} which contains LD informations between SNPs (computed with \code{\link{writeLD}} or PLINK).}
         \item{eSNP, xSNP}{[SNP]: contain a \code{\linkS4class{EnrichSNP}} object (whith slots: SNP, Table, EnrichmentRatio, Z, PValue and Resampling) for a list of SNPs (\code{eSNP}) and an extended one (\code{xSNP}).}
         % \item{xSNP}{[SNP]: contains a \code{\linkS4class{EnrichSNP}} object (whith slots: SNP, Table, EnrichmentRatio, Z, PValue and Resampling) for an extended list of SNPs.}
     }

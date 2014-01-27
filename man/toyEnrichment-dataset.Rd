@@ -1,21 +1,20 @@
-\name{toyEnrichmentM2-dataset}
+\name{toyEnrichment-dataset}
 \docType{data}
-\alias{toyEnrichmentM2}
-\alias{toyEnrichmentM2-dataset}
+\alias{toyEnrichment}
+\alias{toyEnrichment-dataset}
 
 \title{Toy dataset with SNP data}
 
 \description{
 This data set gives an \code{\linkS4class{Enrichment}} object after,
 \code{\link{initFiles}} and \code{\link{readEnrichment}} is ran.
-The LD extend method used is "LD Block" (in \code{\link{readEnrichment}}: \code{extendMethod="block"}).
-LD blocks are defined by clustering all SNPs between two SNPs in LD.
+Compute LD for all SNPs in \code{snpListDir} files two by two.
 Genome Build 37.3 (hg19).
 }
 
 \usage{
-data(toyEnrichmentM2)
-toyEnrichmentM2
+data(toyEnrichment)
+toyEnrichment
 }
 
 \format{
@@ -37,5 +36,5 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 \author{Mickael Canouil \email{mickael.canouil@good.ibl.fr}}
 
 \keyword{datasets}
-\keyword{toyEnrichmentM2}
+\keyword{toyEnrichment}
 \keyword{snpEnrichment}

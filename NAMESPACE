@@ -3,10 +3,10 @@ exportMethods(
     "[",
     "[<-",
     "show",
-    "summary",
+    # "summary",
     "plot",
     "reset",
-    # "print",
+    "print",
     
     "enrichSNP",
     "is.EnrichSNP",

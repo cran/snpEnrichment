@@ -15,15 +15,16 @@ The function invokes particular \code{methods} which depend on the \code{class} 
 }
 
 \usage{
-\S4method{plot}{Enrichment}(x, onlyGenome = FALSE, chr = NULL, 
-           types = c("eSNP", "xSNP"), ...)
+\S4method{plot}{Enrichment}(x, what = "Genome", types = c("eSNP", "xSNP"), 
+           ggplot = FALSE, pvalue = TRUE, ...)
 }
 
 \arguments{
     \item{x}{[Enrichment]: an object of class \code{\linkS4class{Enrichment}} which the Z statistics have to be drawn.}
-    \item{onlyGenome}{[character]: if \code{TRUE} (default \code{onlyGenome=FALSE}) plot Z statistics for genome only.}
-    \item{chr}{[vector(numeric)]: \code{chr=NULL} (default) plot Z statistics for the whole genome and all chromosomes or the selected chromosomes.}
+    \item{what}{[character or vector(numeric)]: default \code{what="Genome"}) plot Z statistics for genome only (what must be: "All", "Genome" or numeric vector).}
     \item{types}{[vector(character)]: plot the selected analysis for "eSNP" and/or "xSNP".}
+    \item{ggplot}{[logical]: use ggplot (default \code{ggplot=FALSE}) instead of classic plot method.}
+    \item{pvalue}{[logical]: if 'TRUE', pvalue convergense is plotted. Otherwise, Z statistic is plotted.}
     \item{...}{[any]: Arguments to be passed to methods, such as graphical parameters (see \code{par})}
 }
 
@@ -48,7 +49,7 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 
 \examples{
 \dontrun{
-data(toyEnrichmentM1)
-reSample(toyEnrichmentM1, 10)
-plot(toyEnrichmentM1)}
+data(toyEnrichment)
+reSample(toyEnrichment, 10)
+plot(toyEnrichment)}
 }

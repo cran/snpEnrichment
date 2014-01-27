@@ -14,7 +14,7 @@ readEnrichment(pattern = "Chrom", signalFile,
                transcriptFile = "FALSE", snpListDir, 
                snpInfoDir, distThresh = 1000, 
                sigThresh = 0.05, LD = FALSE, ldDir = NULL,
-               extendMethod = "ld", mc.cores = 1)
+               mc.cores = 1)
 }
 
 \arguments{
@@ -29,13 +29,10 @@ readEnrichment(pattern = "Chrom", signalFile,
     \item{snpInfoDir}{[character]: character string naming a directory containing the reference data in a PLINK format (*.bed, *.bim and *.fam).}
     \item{distThresh}{[numeric]: maximal distance (kb) between SNP and gene. \code{distThresh} is used if \code{transcriptFile} is set.}
     \item{sigThresh}{[numeric]: statistical threshold for signal (e.g. \code{sigThresh = 0.05} for a given GWAS signal) used to compute an Enrichment Ratio.}
-    \item{LD}{[logical]: \code{LD=TRUE} (default is \code{FALSE}) read LD compute with \code{\link{writeLD}} functions.
+    \item{LD}{[logical]: \code{LD=TRUE} (default is \code{FALSE}) read LD compute with \code{\link{writeLD}} function or with PLINK.
     Note that, this setting can increase the computation's time, depending on number of SNPs in the signal file.}
-    \item{ldDir}{[character]: character string naming a directory where the linkage Disequilibrium files should be written (default \code{ldDir=NULL} is in temporary directory).}
-    \item{extendMethod}{[character]: character string naming the method to be used to extend the list of eSNPs. 
-    Default is "ld", the list of eSNPs is extended with all SNPs in LD (r^2 threshold, defined in \code{\link{writeLD}}).
-    Otherwise, "block", extends the list of eSNPs by defining LD blocks with LD measures and positions of SNPs on chromosomes.}
-    \item{mc.cores}{[numeric]: The number of cores to use (default is \code{mc.cores=1}), i.e. at most how many child processes will be run simultaneously. 
+    \item{ldDir}{[character]: character string naming a directory where the linkage disequilibrium files should be read (default \code{ldDir=NULL} is in temporary directory). LD files can be the LD output from plink.}
+    \item{mc.cores}{[numeric]: the number of cores to use (default is \code{mc.cores=1}), i.e. at most how many child processes will be run simultaneously. 
     Must be at least one, and parallelization requires at least two cores.}
 }
 
@@ -83,7 +80,6 @@ toy_M1 <- readEnrichment(pattern = "Chrom",
                          sigThresh = 0.05, 
                          LD = FALSE, 
                          ldDir = NULL, 
-                         extendMethod = "ld", 
                          mc.cores = 1)
 toy_M1}
 }

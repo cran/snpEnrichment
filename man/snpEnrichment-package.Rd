@@ -25,7 +25,7 @@ Implements classes and methods for large-scale SNP enrichment analysis (e.g. SNP
 }
 
 \note{
-In order to use all options, PLINK must be installed. PLINK is used to compute the Linkage Disequilibrium and get the Minor Allele Frequency from a reference dataset like 1Kg Genome.
+Internal data management in 'snpEnrichment' use RefSNP (rs) IDs.
 }
 
 \seealso{
@@ -52,10 +52,10 @@ snpListDir <- system.file("extdata/List",
                           package = "snpEnrichment")
 signalFile <- system.file("extdata/Signal/toySignal.txt", 
                           package = "snpEnrichment")
-initFiles(pattern = "Chrom", snpInfoDir, snpListDir, 
-          signalFile, mc.cores = 1)
-writeLD(pattern = "Chrom", snpInfoDir, signalFile, ldDir = NULL, 
-        ldThresh = 0.8, mc.cores = 1)}
+initFiles(pattern = "Chrom", snpInfoDir, signalFile, mc.cores = 1)
+writeLD(pattern = "Chrom", snpInfoDir, signalFile, 
+        ldDir = NULL, ldThresh = 0.8, depth = 1000, 
+        mc.cores = 1)}
 
 ###################
 ### 2. Reading data
@@ -74,18 +74,18 @@ transcriptFile <- transcript
 toy_M1 <- readEnrichment(pattern = "Chrom", signalFile, 
                          transcriptFile, snpListDir, 
                          snpInfoDir, distThresh = 1000, 
-                         sigThresh = 0.05, LD = "FALSE", 
-                         ldDir = NULL, extendMethod = "ld", 
-                         mc.cores = 1)
+                         sigThresh = 0.05, LD = FALSE, 
+                         ldDir = NULL, mc.cores = 1)
 toy_M1}
 
 
 ########################
 ### 3. Computing results
 \dontrun{
-data(toyEnrichmentM1)
-reSample(object = toyEnrichmentM1, 
-         nSample = 10, 
+data(toyEnrichment)
+reSample(object = toyEnrichment, 
+         nSample = 10,
+         empiricPvalue = FALSE, 
          MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5), 
          mc.cores = 1,
          onlyGenome = FALSE)}
@@ -95,7 +95,7 @@ reSample(object = toyEnrichmentM1,
 ### 5. Further analysis
 ## Exclude SNP from original list.
 \dontrun{
-data(toyEnrichmentM1) # data(toyEnrichmentM2)
+data(toyEnrichment)
 excludeFile <- c(
     "rs7897180", "rs4725479", "rs315404", "rs17390391", "rs1650670",
     "rs6783390", "rs1642009", "rs4756586", "rs11995037", "rs4977345",
@@ -109,12 +109,13 @@ excludeFile <- c(
     "rs1374393", "rs13268781", "rs11134505", "rs7325241", "rs7520109"
 )
 
-toyM1_exclude <- excludeSNP(toyEnrichmentM1, excludeFile, mc.cores = 1)
+toyM1_exclude <- excludeSNP(toyEnrichment, excludeFile, mc.cores = 1)
 
-compareResults <- compareEnrichment(object.x = toyEnrichmentM1, 
+compareResults <- compareEnrichment(object.x = toyEnrichment, 
                                     object.y = toyM1_exclude, 
                                     pattern = "Chrom", 
                                     nSample = 10, 
+                                    empiricPvalue = FALSE, 
                                     mc.cores = 1, 
                                     onlyGenome = TRUE)}
 
@@ -122,8 +123,8 @@ compareResults <- compareEnrichment(object.x = toyEnrichmentM1,
 ####################
 ### 4. Watch results
 \dontrun{
-show(toyEnrichmentM1)
-summary(toyEnrichmentM1)
+show(toyEnrichment)
+summary(toyEnrichment)
 
 show(toyM1_exclude)
 summary(toyM1_exclude)}

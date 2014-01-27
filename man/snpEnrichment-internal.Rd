@@ -15,6 +15,7 @@
 \alias{.readTranscript}
 \alias{.readFreq}
 \alias{.readLD}
+\alias{.checkTranscript}
 \alias{.readFiles}
 \alias{.enrichmentRatio}
 \alias{.reSample}
@@ -45,8 +46,8 @@
 \alias{computeER,Chromosome-method}
 \alias{computeER,Enrichment-method}
 \alias{computeER,ANY-method}
-\alias{doLDblock}
-\alias{doLDblock,Chromosome-method}
+% \alias{doLDblock}
+% \alias{doLDblock,Chromosome-method}
 % \alias{doLDblock,ANY-method}
 
 

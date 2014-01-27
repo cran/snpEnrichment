@@ -86,24 +86,25 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 \keyword{enrichment}
 
 \examples{
-data(toyEnrichmentM1)
+data(toyEnrichment)
 toyEnrich <- enrichment()
 show(toyEnrich)
 
-toyEnrich["Loss"] <- toyEnrichmentM1["Loss"]
+toyEnrich["Loss"] <- toyEnrichment["Loss"]
 toyEnrich["Loss"]
 
-toyEnrich <- enrichment(Loss = toyEnrichmentM1["Loss"], 
-                        eSNP = toyEnrichmentM1["eSNP"])
-toyEnrich <- enrichment(Loss = toyEnrichmentM1["Loss"])
+toyEnrich <- enrichment(Loss = toyEnrichment["Loss"], 
+                        eSNP = toyEnrichment["eSNP"])
+toyEnrich <- enrichment(Loss = toyEnrichment["Loss"])
 
 \dontrun{
-reSample(object = toyEnrichmentM1, 
+reSample(object = toyEnrichment, 
          nSample = 10, 
+         empiricPvalue = FALSE, 
          MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
          mc.cores = 1,
          onlyGenome = FALSE)
-summary(toyEnrichmentM1)
+summary(toyEnrichment)
 
 excludeFile <- c(
 "rs7897180", "rs4725479", "rs315404", "rs17390391", "rs1650670",
@@ -118,6 +119,6 @@ excludeFile <- c(
     "rs1374393", "rs13268781", "rs11134505", "rs7325241", "rs7520109"
 )
 
-toyM1_exclude <- excludeSNP(toyEnrichmentM1, excludeFile, mc.cores = 1)
+toyM1_exclude <- excludeSNP(toyEnrichment, excludeFile, mc.cores = 1)
 summary(toyM1_exclude)}
 }

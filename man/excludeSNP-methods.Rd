@@ -22,7 +22,7 @@ excludeSNP(object, excludeFile, mc.cores = 1)
 \arguments{
     \item{object}{[Enrichment]: an \code{\linkS4class{Enrichment}} object filled by \code{\link{reSample}}.}
     \item{excludeFile}{[vector(character)]: a list of SNPs to remove from a previous enrichment analysis. A path to a file which the first column are the SNPs.}
-    \item{mc.cores}{[numeric]: The number of cores to use (default is \code{mc.cores=1}), i.e. at most how many child processes will be run simultaneously. 
+    \item{mc.cores}{[numeric]: the number of cores to use (default is \code{mc.cores=1}), i.e. at most how many child processes will be run simultaneously. 
     Must be at least one, and parallelization requires at least two cores.}
     % \item{onlyGenome}{[logical]: \code{onlyGenome=FALSE} (default) compute resampling step for all chromosomes.}
 }
@@ -50,7 +50,7 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 
 \examples{
 \dontrun{
-data(toyEnrichmentM1) # data(toyEnrichmentM2)
+data(toyEnrichment)
 excludeFile <- c(
     "rs7897180", "rs4725479", "rs315404", "rs17390391", "rs1650670",
     "rs6783390", "rs1642009", "rs4756586", "rs11995037", "rs4977345",
@@ -64,6 +64,6 @@ excludeFile <- c(
     "rs1374393", "rs13268781", "rs11134505", "rs7325241", "rs7520109"
 )
 
-toyM1_exclude <- excludeSNP(toyEnrichmentM1, excludeFile, mc.cores = 1)
+toyM1_exclude <- excludeSNP(toyEnrichment, excludeFile, mc.cores = 1)
 toyM1_exclude}
 }

@@ -21,23 +21,24 @@ After \code{\link{initFiles}} and \code{\link{readEnrichment}} has been run.
 
 \usage{
 \S4method{reSample}{Enrichment}(object, nSample = 100, 
+         empiricPvalue = FALSE, 
          MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
          mc.cores = 1, onlyGenome = FALSE)
 
-\S4method{reSample}{Chromosome}(object, nSample = 100, sigThresh = 0.05, 
+\S4method{reSample}{Chromosome}(object, nSample = 100, 
+         empiricPvalue = FALSE, sigThresh = 0.05, 
          MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
-         extendMethod = "ld", mc.cores = 1)
+         mc.cores = 1)
 }
 
 \arguments{
     \item{object}{[Enrichment or Chromosome]: an object to be updated. It is intended, an object returned by the \code{\link{readEnrichment}} function.}
     \item{nSample}{[numeric]: the number of resampling done by \code{\link{reSample}} for p-values computation (minimum is 100).}
+    \item{empiricPvalue}{[logical]: \code{empiricPvalue=FALSE} (default) compute PValue based on the null distribution (resampling). 
+    If \code{empiricPvalue=TRUE}, the empirical p-values are computed instead.}
     \item{sigThresh}{[numeric]: statistical threshold for signal (e.g. \code{sigThresh = 0.05} for a given GWAS signal) used to compute an Enrichment Ratio.}
     \item{MAFpool}{[vector(numeric)]: either a numeric vector giving the breaks points of intervals into which SNP's MAF (Minor Allele Frequency) is to be split.}
-    \item{extendMethod}{[character]: character string naming the method to be used to extend the list of eSNPs. 
-    Default is "ld", the list of eSNPs is extended with all SNPs in LD (r^2 threshold, defined in \code{\link{writeLD}}).
-    Otherwise, "block", extends the list of eSNPs by defining LD blocks with LD measures and positions of SNPs on chromosomes.}
-    \item{mc.cores}{[numeric]: The number of cores to use (default is \code{mc.cores=1}), i.e. at most how many child processes will be run simultaneously. 
+    \item{mc.cores}{[numeric]: the number of cores to use (default is \code{mc.cores=1}), i.e. at most how many child processes will be run simultaneously. 
     Must be at least one, and parallelization requires at least two cores.}
     \item{onlyGenome}{[logical]: \code{onlyGenome=FALSE} (default) compute resampling step for all chromosomes.}
 }
@@ -65,10 +66,11 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 
 \examples{
 \dontrun{
-data(toyEnrichmentM1)
-reSample(object = toyEnrichmentM1, 
+data(toyEnrichment)
+reSample(object = toyEnrichment, 
          nSample = 10, 
+         empiricPvalue = FALSE, 
          MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5), 
          onlyGenome = FALSE)
-toyEnrichmentM1}
+toyEnrichment}
 }
