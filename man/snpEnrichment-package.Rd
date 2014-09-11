@@ -46,35 +46,35 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 #######################
 ### 1. Data Preparation
 \dontrun{
-snpInfoDir <- system.file("extdata/snpInfo", 
+snpInfoDir <- system.file("extdata/snpInfo",
                           package = "snpEnrichment")
-snpListDir <- system.file("extdata/List", 
+snpListDir <- system.file("extdata/List",
                           package = "snpEnrichment")
-signalFile <- system.file("extdata/Signal/toySignal.txt", 
+signalFile <- system.file("extdata/Signal/toySignal.txt",
                           package = "snpEnrichment")
 initFiles(pattern = "Chrom", snpInfoDir, signalFile, mc.cores = 1)
-writeLD(pattern = "Chrom", snpInfoDir, signalFile, 
-        ldDir = NULL, ldThresh = 0.8, depth = 1000, 
+writeLD(pattern = "Chrom", snpInfoDir, signalFile,
+        ldDir = NULL, ldThresh = 0.8, depth = 1000,
         mc.cores = 1)}
 
 ###################
 ### 2. Reading data
 \dontrun{
-snpListDir <- system.file("extdata/List", 
+snpListDir <- system.file("extdata/List",
                           package = "snpEnrichment")
-signalFile <- system.file("extdata/Signal/toySignal.txt", 
+signalFile <- system.file("extdata/Signal/toySignal.txt",
                           package = "snpEnrichment")
-excludeFile <- system.file("extdata/Exclude/toyExclude.txt", 
+excludeFile <- system.file("extdata/Exclude/toyExclude.txt",
                            package = "snpEnrichment")
-snpInfoDir <- system.file("extdata/snpInfo", 
+snpInfoDir <- system.file("extdata/snpInfo",
                           package = "snpEnrichment")
 data(transcript)
 transcriptFile <- transcript
 
-toy_M1 <- readEnrichment(pattern = "Chrom", signalFile, 
-                         transcriptFile, snpListDir, 
-                         snpInfoDir, distThresh = 1000, 
-                         sigThresh = 0.05, LD = FALSE, 
+toy_M1 <- readEnrichment(pattern = "Chrom", signalFile,
+                         transcriptFile, snpListDir,
+                         snpInfoDir, distThresh = 1000,
+                         sigThresh = 0.05, LD = FALSE,
                          ldDir = NULL, mc.cores = 1)
 toy_M1}
 
@@ -83,10 +83,10 @@ toy_M1}
 ### 3. Computing results
 \dontrun{
 data(toyEnrichment)
-reSample(object = toyEnrichment, 
+reSample(object = toyEnrichment,
          nSample = 10,
-         empiricPvalue = FALSE, 
-         MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5), 
+         empiricPvalue = FALSE,
+         MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
          mc.cores = 1,
          onlyGenome = FALSE)}
 
@@ -111,12 +111,12 @@ excludeFile <- c(
 
 toyM1_exclude <- excludeSNP(toyEnrichment, excludeFile, mc.cores = 1)
 
-compareResults <- compareEnrichment(object.x = toyEnrichment, 
-                                    object.y = toyM1_exclude, 
-                                    pattern = "Chrom", 
-                                    nSample = 10, 
-                                    empiricPvalue = FALSE, 
-                                    mc.cores = 1, 
+compareResults <- compareEnrichment(object.x = toyEnrichment,
+                                    object.y = toyM1_exclude,
+                                    pattern = "Chrom",
+                                    nSample = 10,
+                                    empiricPvalue = FALSE,
+                                    mc.cores = 1,
                                     onlyGenome = TRUE)}
 
 

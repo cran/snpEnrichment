@@ -15,7 +15,7 @@ The function invokes particular \code{methods} which depend on the \code{class} 
 }
 
 \usage{
-\S4method{plot}{Enrichment}(x, what = "Genome", types = c("eSNP", "xSNP"), 
+\S4method{plot}{Enrichment}(x, what = "Genome", types = c("eSNP", "xSNP"),
            ggplot = FALSE, pvalue = TRUE, ...)
 }
 

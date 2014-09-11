@@ -15,7 +15,7 @@
 \title{Class \code{"\linkS4class{EnrichSNP}"}}
 
 \description{
-This class is defined to summarize the enrichment analysis. 
+This class is defined to summarize the enrichment analysis.
 It's a part of \code{\linkS4class{Chromosome}} and \code{\linkS4class{Enrichment}} classes.
 }
 
@@ -43,7 +43,7 @@ It's a part of \code{\linkS4class{Chromosome}} and \code{\linkS4class{Enrichment
 }
 
 \note{
-\code{\linkS4class{EnrichSNP}} object is not intended to be use directly by user. 
+\code{\linkS4class{EnrichSNP}} object is not intended to be use directly by user.
 It is a part of the \code{\linkS4class{Enrichment}} and \code{\linkS4class{Chromosome}} object.
 }
 

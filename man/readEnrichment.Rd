@@ -10,20 +10,20 @@ Read files created by \code{\link{initFiles}} and create an \code{\linkS4class{E
 }
 
 \usage{
-readEnrichment(pattern = "Chrom", signalFile, 
-               transcriptFile = "FALSE", snpListDir, 
-               snpInfoDir, distThresh = 1000, 
+readEnrichment(pattern = "Chrom", signalFile,
+               transcriptFile = "FALSE", snpListDir,
+               snpInfoDir, distThresh = 1000,
                sigThresh = 0.05, LD = FALSE, ldDir = NULL,
                mc.cores = 1)
 }
 
 \arguments{
     \item{pattern}{[character]: character string containing a expression to be matched with all chromosomes files (e.g."Chrom" for  files which start by "Chrom" followed by the chromosome number).}
-    \item{signalFile}{[character]: the name of the signal file which the data are to be read from (2 columns: "SNP" and "PVALUE"). 
+    \item{signalFile}{[character]: the name of the signal file which the data are to be read from (2 columns: "SNP" and "PVALUE").
     Each row of the table appears as one line of the file.
     If it does not contain an \code{_absolute_} path, the file name is \code{_relative_} to the current working directory, \code{getwd}.
     The fields separator character have to be a space \code{" "} or a tabulation \code{"\\t"}.}
-    \item{transcriptFile}{[character or data.frame]: character string naming a file or a \code{data.frame} with four columns: Chromomosome, trancript's name, Starting and Ending positions. 
+    \item{transcriptFile}{[character or data.frame]: character string naming a file or a \code{data.frame} with four columns: Chromomosome, trancript's name, Starting and Ending positions.
     \code{data(trancript)} can be use as parameters. Default is \code{FALSE}.}
     \item{snpListDir}{[character]: character string naming a directory containing a list of SNPs for each chromosomes.}
     \item{snpInfoDir}{[character]: character string naming a directory containing the reference data in a PLINK format (*.bed, *.bim and *.fam).}
@@ -32,7 +32,7 @@ readEnrichment(pattern = "Chrom", signalFile,
     \item{LD}{[logical]: \code{LD=TRUE} (default is \code{FALSE}) read LD compute with \code{\link{writeLD}} function or with PLINK.
     Note that, this setting can increase the computation's time, depending on number of SNPs in the signal file.}
     \item{ldDir}{[character]: character string naming a directory where the linkage disequilibrium files should be read (default \code{ldDir=NULL} is in temporary directory). LD files can be the LD output from plink.}
-    \item{mc.cores}{[numeric]: the number of cores to use (default is \code{mc.cores=1}), i.e. at most how many child processes will be run simultaneously. 
+    \item{mc.cores}{[numeric]: the number of cores to use (default is \code{mc.cores=1}), i.e. at most how many child processes will be run simultaneously.
     Must be at least one, and parallelization requires at least two cores.}
 }
 
@@ -61,25 +61,25 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 
 \examples{
 \dontrun{
-snpListDir <- system.file("extdata/List", 
+snpListDir <- system.file("extdata/List",
                           package = "snpEnrichment")
-signalFile <- system.file("extdata/Signal/toySignal.txt", 
+signalFile <- system.file("extdata/Signal/toySignal.txt",
                           package = "snpEnrichment")
-excludeFile <- system.file("extdata/Exclude/toyExclude.txt", 
+excludeFile <- system.file("extdata/Exclude/toyExclude.txt",
                            package = "snpEnrichment")
 snpInfoDir <- system.file("extdata/snpInfo", package = "snpEnrichment")
 data(transcript)
 transcriptFile <- transcript
 
-toy_M1 <- readEnrichment(pattern = "Chrom", 
-                         signalFile, 
-                         transcriptFile, 
-                         snpListDir, 
-                         snpInfoDir, 
-                         distThresh = 1000, 
-                         sigThresh = 0.05, 
-                         LD = FALSE, 
-                         ldDir = NULL, 
+toy_M1 <- readEnrichment(pattern = "Chrom",
+                         signalFile,
+                         transcriptFile,
+                         snpListDir,
+                         snpInfoDir,
+                         distThresh = 1000,
+                         sigThresh = 0.05,
+                         LD = FALSE,
+                         ldDir = NULL,
                          mc.cores = 1)
 toy_M1}
 }

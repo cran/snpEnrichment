@@ -1,3 +1,8 @@
+2014-09-11 Mickael Canouil
+        * DESCRIPTION: version is 1.4-1
+        * R/*.R: Minor optimizations.
+        * R/enrichment.R: Fix a bug in 'plot' method with 'ggplot=TRUE'.
+
 2014-01-27 Mickael Canouil
         * DESCRIPTION: version is 1.4-0
         * R/Global.R: Change internal functions used by 'readEnrichment' and 'writeLD'.
@@ -7,7 +12,7 @@
         * R/enrichment.R: Fix a bug when 'object' was not updated properly, with 'reSample' function and all defaults parameters.
         * R/*.R: Remove 'extendMethod' parameters from all functions.
         * data/: Remove 'toyEnrichmentM2.RData'.
-        * data/: Rename 'toyEnrichmentM1.RData' to'toyEnrichment.RData'
+        * data/: Rename 'toyEnrichmentM1.RData' to 'toyEnrichment.RData'
         * man/*.Rd: Update according to R code changes.
 
 2014-01-23 Mickael Canouil
@@ -24,7 +29,7 @@
 
 2014-01-13 Mickael Canouil
         * DESCRIPTION: version is 1.3-10
-        * R/*.R: Add 'empiricPvalue' arguments in order to choose if p-values should be empirical 
+        * R/*.R: Add 'empiricPvalue' arguments in order to choose if p-values should be empirical
             or based on null distribution (resampling).
 
 2014-01-08 Mickael Canouil
@@ -40,8 +45,8 @@
 2013-12-19 Mickael Canouil
         * DESCRIPTION: version is 1.3-7
         * R/*.R: Minor changes in R code.
-        * R/Global.R: Change p-value computation in '.reSample' and 'compareEnrich' functions. 
-        * R/Global.R: Convergence control on Z statistic is removed in '.reSample' and 'compareEnrich' functions. 
+        * R/Global.R: Change p-value computation in '.reSample' and 'compareEnrich' functions.
+        * R/Global.R: Convergence control on Z statistic is removed in '.reSample' and 'compareEnrich' functions.
 
 2013-12-18 Mickael Canouil
         * DESCRIPTION: version is 1.3-6
@@ -103,9 +108,9 @@
         * R/Global.R: 'initFiles' now write and clean tempory files used by 'readEnrichment'.
         * R/Global.R: Now LD is only computed by 'writeLD'. Not anymore by 'initFiles'.
         * R/Global.R: Remove 'ldThresh' and 'LD' parameters from 'initFiles'.
-        * R/Global.R: Remove 'signalFile', 'transcriptFile', 'snpInfoDir', 'distThresh', 'LD', 
+        * R/Global.R: Remove 'signalFile', 'transcriptFile', 'snpInfoDir', 'distThresh', 'LD',
             'ldThresh', 'sigThresh', 'MAFpool' and 'extendMethod' parameters from 'compareEnrichment'.
-        * R/enrichment.R: Remove 'signalFile', 'transcriptFile', 'snpInfoDir', 'distThresh', 'LD', 
+        * R/enrichment.R: Remove 'signalFile', 'transcriptFile', 'snpInfoDir', 'distThresh', 'LD',
             'ldThresh', 'sigThresh', 'MAFpool' and 'extendMethod' parameters from 'compareEnrichment'.
         * R/enrichment.R: Fix issue for the whole genome convergence plot in 'plot' methods. Add parameter 'onlyGenome'.
         * man/*.Rd: Update documentations files according to R code modification.
@@ -122,7 +127,7 @@
         * DESCRIPTION: version is 1.2-0
         * R/enrichment.R: Add 'onlyGenome' parameter, which allow to compute the resampling step at chromosome level and genome or only at genome level.
         * R/enrichment.R: Fix 'plot' methods for low number of resampling.
-        * R/enrichment.R: Change 'Parameters' to "Call". 
+        * R/enrichment.R: Change 'Parameters' to "Call".
         * R/enrichment.R: 'show' is available for 'Call' slot.
         * R/enrichment.R: Remove 'sigThresh' and 'extendMethod' parameters from "reSample" method with 'signature="Enrichment"'.
         * R/enrichment.R: Remove 'sigThresh' and 'extendMethod' parameters from "excludeSNP" methods.
@@ -164,7 +169,7 @@
             Note: 'excludeFile' can be a character vector with SNPs or a file path which contains a SNPs list.
         * R/Global.R: The function 'writeLD' now compute Linkage Disequilibrium for all SNPs in reference data or only for SNPs in signal.
         * R/enrichment.R: The slot 'Signal' of Enrichment object is replaced by slot 'Loss'. This slot gives information about data losses (e.g. SNPs removed).
-        * R/Global.R: Add 'plot' method for Enrichment object. This method show the convergence of Z statistics. 
+        * R/Global.R: Add 'plot' method for Enrichment object. This method show the convergence of Z statistics.
             Z statistic is scaled and centered in order to compare the convergence in chromosomes/genome.
         * R/Global.R: Fix a bug where some SNP which are not in reference data ('snpInfoDir') were not extended with SNP in LD.
         * R/Global.R: Fix bug for the extend method 'LD block' where SNPs which are not in linkage with another SNP, are removed.

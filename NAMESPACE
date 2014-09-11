@@ -7,14 +7,14 @@ exportMethods(
     "plot",
     "reset",
     "print",
-    
+
     "enrichSNP",
     "is.EnrichSNP",
     "chromosome",
     "is.chromosome",
     "enrichment",
     "is.enrichment",
-    
+
     "reSample",
     "excludeSNP",
     "compareEnrichment"

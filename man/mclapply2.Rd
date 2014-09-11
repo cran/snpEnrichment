@@ -18,9 +18,9 @@ mclapply2(X, FUN, ..., mc.preschedule = TRUE, mc.set.seed = TRUE,
 }
 
 \arguments{
-    \item{X}{a vector (atomic or list) or an expressions vector. 
+    \item{X}{a vector (atomic or list) or an expressions vector.
         Other objects (including classed objects) will be coerced by \code{\link{as.list}}.}
-    \item{FUN}{the function to be applied to (\code{mclapply}) each 
+    \item{FUN}{the function to be applied to (\code{mclapply}) each
         element of \code{X} or (\code{mcmapply}) in parallel to \code{\dots}.}
     \item{...}{For \code{mclapply}, optional arguments to \code{FUN}.}
     \item{mc.preschedule}{if set to \code{TRUE} then the computation is

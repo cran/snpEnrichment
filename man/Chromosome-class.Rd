@@ -25,9 +25,9 @@ This class is defined to summarize the enrichment analysis about a chromosome.
 }
 
 \section{Objects from the Class}{
-    \code{\link{chromosome}} is defined to build an object of class 
+    \code{\link{chromosome}} is defined to build an object of class
     \code{\linkS4class{Chromosome}} in order to compute an enrichment analysis.
-    A \code{\linkS4class{Chromosome}} object contains the original data, 
+    A \code{\linkS4class{Chromosome}} object contains the original data,
     a list of SNPs, some results and resampling data.\cr
 
     When created, an \code{\linkS4class{Chromosome}} object is "empty".
@@ -63,7 +63,7 @@ Class \code{\linkS4class{EnrichSNP}}, directly.\cr
         % \item{doLDblock(object, mc.cores):}{Compute LD block and update \code{Data} field (internal use only).}
         % \item{reSample(object, nSample, sigThresh, MAFpool, extendMethod, mc.cores):}{Compute P-Value based upon a resampling of SNPs (\code{eSNP} and \code{xSNP}) and update an \code{\linkS4class{Chromosome}} object.}
         % \item{excludeSNP(object, excludeFile, nSample, MAFpool, mc.cores):}{Exclude SNPs from eSNPs list and xSNPs list and compute a new enrichment analysis.}
-        % \item{summary(object, extended):}{Return a list of \code{data.frame} which summarize enrichment analysis for \code{eSNP} and/or \code{xSNP}. 
+        % \item{summary(object, extended):}{Return a list of \code{data.frame} which summarize enrichment analysis for \code{eSNP} and/or \code{xSNP}.
            % \code{extended=TRUE} (default) to add \code{xSNP}.}
         % \item{reset(object, "slotName"):}{Reset the field \code{slotName}.}
     }
@@ -92,19 +92,19 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 \examples{
 Data <- structure(
     list(
-        SNP = c("rs4970420", "rs3766178", 
-                "rs10910030", "rs10910036", 
-                "rs2234167", "rs6661861"), 
-        PVALUE = c(0.9244, 0.167, 0.01177, 0.4267, 0.9728, 0.4063), 
+        SNP = c("rs4970420", "rs3766178",
+                "rs10910030", "rs10910036",
+                "rs2234167", "rs6661861"),
+        PVALUE = c(0.9244, 0.167, 0.01177, 0.4267, 0.9728, 0.4063),
         CHR = c(1, 1, 1, 1, 1, 1),
-        POS = c(1106473, 1478180, 2035684, 2183754, 2494330, 3043121), 
-        MAF = c(0.2149, 0.3117, 0.374, 0.3753, 0.1565, 0.06101), 
-        eSNP = c(0, 1, 1, 0, 0, 0), 
+        POS = c(1106473, 1478180, 2035684, 2183754, 2494330, 3043121),
+        MAF = c(0.2149, 0.3117, 0.374, 0.3753, 0.1565, 0.06101),
+        eSNP = c(0, 1, 1, 0, 0, 0),
         xSNP = c(0, 1, 1, 0, 0, 0)
-    ), 
-    .Names = c("SNP", "PVALUE", "CHR", "POS", "MAF", "eSNP", "xSNP"), 
-    row.names = c("rs4970420", "rs3766178", 
-                  "rs10910030", "rs10910036", 
+    ),
+    .Names = c("SNP", "PVALUE", "CHR", "POS", "MAF", "eSNP", "xSNP"),
+    row.names = c("rs4970420", "rs3766178",
+                  "rs10910030", "rs10910036",
                   "rs2234167", "rs6661861"),
 class = "data.frame")
 

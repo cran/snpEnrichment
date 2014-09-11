@@ -6,7 +6,7 @@
 \title{Transcript information in order to check the CIS status for SNPs}
 
 \description{
-This dataset is used by \code{\link{readEnrichment}} and \code{\link{compareEnrichment}} 
+This dataset is used by \code{\link{readEnrichment}} and \code{\link{compareEnrichment}}
 in order to check the CIS status for each SNP of signal.
 Genome Build 37.3 (hg19).
 }

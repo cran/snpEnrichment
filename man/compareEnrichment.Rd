@@ -11,13 +11,13 @@ Compare enrichment analysis between two SNPs list
 }
 
 \description{
-Compare the enrichment analysis between two set of SNPs. 
+Compare the enrichment analysis between two set of SNPs.
 \code{\link{compareEnrichment}} compare two \code{\linkS4class{Enrichment}} objects.
 }
 
 \usage{
 compareEnrichment(object.x, object.y, pattern = "Chrom",
-                  nSample = 100, empiricPvalue = FALSE, 
+                  nSample = 100, empiricPvalue = FALSE,
                   mc.cores = 1, onlyGenome = FALSE)
 }
 
@@ -25,9 +25,9 @@ compareEnrichment(object.x, object.y, pattern = "Chrom",
     \item{object.x, object.y}{[Enrichment]: an \code{\linkS4class{Enrichment}} object fully filled (e.g. \code{\link{readEnrichment}}).}
     \item{pattern}{[character]: character string containing a expression to be matched with all chromosomes files (e.g."Chrom" for  files which start by "Chrom" followed by the chromosome number).}
     \item{nSample}{[numeric]: the number of resampling done by \code{\link{reSample}} for p-values computation (minimum is 100).}
-    \item{empiricPvalue}{[logical]: \code{empiricPvalue=FALSE} (default) compute PValue based on the null distribution (resampling). 
+    \item{empiricPvalue}{[logical]: \code{empiricPvalue=FALSE} (default) compute PValue based on the null distribution (resampling).
     If \code{empiricPvalue=TRUE}, the empirical p-values are computed instead.}
-    \item{mc.cores}{[numeric]: the number of cores to use (default is \code{mc.cores=1}), i.e. at most how many child processes will be run simultaneously. 
+    \item{mc.cores}{[numeric]: the number of cores to use (default is \code{mc.cores=1}), i.e. at most how many child processes will be run simultaneously.
     Must be at least one, and parallelization requires at least two cores.}
     \item{onlyGenome}{[logical]: \code{onlyGenome=FALSE} (default) compute resampling step for all chromosomes.}
 }
@@ -35,7 +35,7 @@ compareEnrichment(object.x, object.y, pattern = "Chrom",
 % \details{}
 
 \value{
-Return a \code{list} of three elements: 
+Return a \code{list} of three elements:
     \item{summary}{Two \code{data.frame} which summarize for \code{eSNP} and/or \code{xSNP} the enrichment analyses and the comparison between them.}
     \item{object1}{\code{\linkS4class{Enrichment}} object passed in \code{object.x} with resampling data.}
     \item{object2}{\code{\linkS4class{Enrichment}} object passed in \code{object.y} with resampling data.}
@@ -63,10 +63,10 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 \dontrun{
 data(toyEnrichment)
 
-reSample(object = toyEnrichment, 
-         nSample = 10, 
-         empiricPvalue = FALSE, 
-         MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5), 
+reSample(object = toyEnrichment,
+         nSample = 10,
+         empiricPvalue = FALSE,
+         MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
          mc.cores = 1,
          onlyGenome = TRUE)
 
@@ -85,11 +85,11 @@ excludeFile <- c(
 
 toyM1_exclude <- excludeSNP(toyEnrichment, excludeFile, mc.cores = 1)
 
-compareResults <- compareEnrichment(object.x = toyEnrichment, 
-                                    object.y = toyM1_exclude, 
-                                    pattern = "Chrom", 
-                                    nSample = 10, 
-                                    empiricPvalue = FALSE, 
-                                    mc.cores = 1, 
+compareResults <- compareEnrichment(object.x = toyEnrichment,
+                                    object.y = toyM1_exclude,
+                                    pattern = "Chrom",
+                                    nSample = 10,
+                                    empiricPvalue = FALSE,
+                                    mc.cores = 1,
                                     onlyGenome = TRUE)}
 }

@@ -184,7 +184,7 @@ writeLD <- function (pattern = "Chrom", snpInfoDir, signalFile, ldDir = NULL, ld
         ldData <- apply(ldData, 1, function (li) { which(li>ldThresh) })
         resLD <- data.frame(matrix(unlist(strsplit(names(unlist(ldData)), "\\.")), ncol = 2, byrow = TRUE, dimnames = list(NULL, c("SNP_A", "SNP_B"))))
         resLD <- resLD[which(resLD[, 1]!=resLD[, 2]), ]
-        
+
         ### Check LD distance
         # snpNames <- grep("[sS][nN][pP]", colnames(plinkData$map), value = TRUE)
         # posNames <- grep("[pP][oO][sS].*", colnames(plinkData$map), value = TRUE)
@@ -193,7 +193,7 @@ writeLD <- function (pattern = "Chrom", snpInfoDir, signalFile, ldDir = NULL, ld
             # abs(tmpPlink[tmpPlink[, snpNames]%in%li["SNP_A"], posNames] - tmpPlink[tmpPlink[, snpNames]%in%li["SNP_B"], posNames])
         # })
         # table(resLD[, "Dist"]<1000000)
-        
+
         write.table(resLD[, c("SNP_A", "SNP_B")], file = paste0(ldDir, newPattern, ".ld"), sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
         cat(iChr, " ", sep = "")
     })
@@ -367,36 +367,36 @@ readEnrichment <- function (pattern = "Chrom", signalFile, transcriptFile = FALS
             resChr <- chromosome(Data = files$data)
         }
         snpLoss <- files$snpLoss
-        
+
         if (all(transcriptFile == FALSE)) {
             resCheckData <- resChr@Data
-            resCheckData <- transform(unique(resCheckData), 
-                SNP = as.character(resCheckData$SNP), 
-                PVALUE = as.numeric(resCheckData$PVALUE), 
-                CHR = as.numeric(resCheckData$CHR), 
-                POS = as.numeric(resCheckData$POS), 
-                MAF = as.numeric(resCheckData$MAF), 
-                eSNP = as.numeric(resCheckData$eSNP), 
+            resCheckData <- transform(unique(resCheckData),
+                SNP = as.character(resCheckData$SNP),
+                PVALUE = as.numeric(resCheckData$PVALUE),
+                CHR = as.numeric(resCheckData$CHR),
+                POS = as.numeric(resCheckData$POS),
+                MAF = as.numeric(resCheckData$MAF),
+                eSNP = as.numeric(resCheckData$eSNP),
                 xSNP = as.numeric(resCheckData$xSNP)
             )
             signalLoss <- c(NA, length(unique(resChr@Data[, "SNP"])), length(unique(resChr@Data[!is.na(resChr@Data[, "PVALUE"]), "SNP"])))
         } else {
             resCheckData <- .checkTranscript(data = resChr@Data, transcriptFile = transcriptFile, distThresh = distThresh)
             snpLoss <- c(snpLoss, sum(as.numeric(resCheckData[, "eSNP"])))
-            resCheckData <- transform(unique(resCheckData), 
-                SNP = as.character(resCheckData$SNP), 
-                PVALUE = as.numeric(resCheckData$PVALUE), 
-                CHR = as.numeric(resCheckData$CHR), 
-                POS = as.numeric(resCheckData$POS), 
-                MAF = as.numeric(resCheckData$MAF), 
-                eSNP = as.numeric(resCheckData$eSNP), 
+            resCheckData <- transform(unique(resCheckData),
+                SNP = as.character(resCheckData$SNP),
+                PVALUE = as.numeric(resCheckData$PVALUE),
+                CHR = as.numeric(resCheckData$CHR),
+                POS = as.numeric(resCheckData$POS),
+                MAF = as.numeric(resCheckData$MAF),
+                eSNP = as.numeric(resCheckData$eSNP),
                 xSNP = as.numeric(resCheckData$xSNP)
             )
             signalLoss <- c(NA, length(unique(resChr@Data[, "SNP"])), length(unique(resChr@Data[!is.na(resChr@Data[, "PVALUE"]), "SNP"])), length(unique(resCheckData[!is.na(resCheckData[, "PVALUE"]), "SNP"])))
         }
 
         resChr <- chromosome(Data = resCheckData, LD = resChr@LD)
-        
+
         cat(iChr, " ", sep = "")
         return(list(resChr, snpLoss, signalLoss))
     })
@@ -408,12 +408,10 @@ readEnrichment <- function (pattern = "Chrom", signalFile, transcriptFile = FALS
     signalLoss <- rowSums(sapply(resParallel, "[[", 3))
     loss <- rbind(Signal = signalLoss, Genome = apply(snpLoss, 2, sum), snpLoss)
     colnames(loss) <- c("Rows", "Unique", "Intersect.Signal", "CIS")[seq(ncol(loss))]
-    # rm(resParallel)
 
     SNPs <- result["List", seq(22)]
     result@eSNP@List <- SNPs[["eSNP"]]
     result@xSNP@List <- SNPs[["xSNP"]]
-    # rm(SNPs)
 
     if (length(unlist(strsplit(readLines(signalFile, n = 1), split = "\t")))>1) {
         signal <- read.delim(file = signalFile, header = TRUE, sep = "\t", colClasses = c("character", "numeric"), na.string = c("NA", ""), check.names = FALSE, strip.white = TRUE, col.names =  c("SNP", "PVALUE"), stringsAsFactors = FALSE)
@@ -426,7 +424,6 @@ readEnrichment <- function (pattern = "Chrom", signalFile, transcriptFile = FALS
     }
     loss[1, c(1, 2)] <- c(length(signal[, "SNP"]), length(unique(signal[, "SNP"])))
     result@Loss <- as.data.frame(loss)
-    # rm(signal)
 
     sysCall <- sys.call(sys.parent())
     argsSNP <- as.list(sysCall[-1])
@@ -525,7 +522,6 @@ readEnrichment <- function (pattern = "Chrom", signalFile, transcriptFile = FALS
     assoc <- factor(data[, "PVALUE"] < sigThresh, levels = c(FALSE, TRUE))
     SNPlist <- data[, "SNP"]
     rm(data)
-    # GC()
 
     cat(0, ".. ", sep = "")
     resParallel <- mclapply2(X = seq(nSampleMin), mc.cores = mc.cores, FUN = function (i) {
@@ -555,7 +551,6 @@ readEnrichment <- function (pattern = "Chrom", signalFile, transcriptFile = FALS
     cat(iSample, ".. ", sep = "")
     catStep <- (nSample/10)
     rm(resParallel)
-    # GC()
 
     while (iSample<nSample) {
         resParallel <- mclapply2(X = seq(nSampleMin), mc.cores = mc.cores, FUN = function (i) {
@@ -585,14 +580,13 @@ readEnrichment <- function (pattern = "Chrom", signalFile, transcriptFile = FALS
         if ((iSample-(iSample%/%catStep*catStep)) == 0) {cat(iSample, ".. ", sep = "")}
         rm(resParallel)
     }
-    # cat("\n")
- 
+
     if (empiricPvalue) {
         whichPvalue <- 2
     } else {
         whichPvalue <- 1
     }
- 
+
     empiricPvalue.eSNP <- sum(eEnrichRatio<eSNPsample[, 5])/length(eSNPsample[, 5])
     statisticPvalue.eSNP <- pnorm(Ze, lower.tail = FALSE)
     object@eSNP <- enrichSNP(List = eSNPlist, Table = eEnrichment, EnrichmentRatio = eEnrichRatio, Z = Ze, PValue = c(Distribution = statisticPvalue.eSNP, Empirical = empiricPvalue.eSNP)[whichPvalue], Resampling = eSNPsample)
@@ -628,7 +622,6 @@ readEnrichment <- function (pattern = "Chrom", signalFile, transcriptFile = FALS
     eSNPlistPool <- table(data[eSNPlist, "MAFpool"])
 
     eSNPsample <- NULL
-    # nSampleMin <- nSample
     nSampleMin <- min(nSample, max(1000, nSample*10/100))
     if (isLD) {
         xEnrichment <- object1@xSNP@Table
@@ -695,7 +688,6 @@ readEnrichment <- function (pattern = "Chrom", signalFile, transcriptFile = FALS
     cat(iSample, ".. ", sep = "")
     catStep <- (nSample/10)
     rm(resParallel)
-    # GC()
 
     while (iSample<nSample) {
         resParallel <- mclapply2(X = seq(nSampleMin), mc.cores = mc.cores, FUN = function (i) {
@@ -749,13 +741,13 @@ readEnrichment <- function (pattern = "Chrom", signalFile, transcriptFile = FALS
         if ((iSample-(iSample%/%catStep*catStep)) == 0) {cat(iSample, ".. ", sep = "")}
         rm(resParallel)
     }
-    
+
     if (empiricPvalue) {
         whichPvalue <- 2
     } else {
         whichPvalue <- 1
     }
-    
+
     empiricPvalue.eSNP <- sum(eEnrichRatio<eSNPsample[, 5])/length(eSNPsample[, 5])
     statisticPvalue.eSNP <- pnorm(Ze, lower.tail = FALSE)
     object1@eSNP <- enrichSNP(List = eSNPlist, Table = eEnrichment, EnrichmentRatio = eEnrichRatio, Z = Ze, PValue = c(Distribution = statisticPvalue.eSNP, Empirical = empiricPvalue.eSNP)[whichPvalue], Resampling = eSNPsample)

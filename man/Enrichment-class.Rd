@@ -28,8 +28,8 @@ This class is defined to summarize the enrichment analysis on each chromosomes a
     \code{\link{enrichment}} is defined to build an object of class \code{\linkS4class{Enrichment}} in order to compute an enrichment analysis.
     \code{Enrichment} is the object containing the results for all \code{\linkS4class{Chromosome}} object and for the whole genome.\cr
 
-    When an \code{\linkS4class{Enrichment}} object is created, it contains a list of SNPs (e.g. eSNPs). 
-    All the others slots are "empty". After \code{\link{reSample}} is ran on an \code{\linkS4class{Enrichment}} object, 
+    When an \code{\linkS4class{Enrichment}} object is created, it contains a list of SNPs (e.g. eSNPs).
+    All the others slots are "empty". After \code{\link{reSample}} is ran on an \code{\linkS4class{Enrichment}} object,
     the slots: Table, EnrichmentRatio, Z, PValue and Resampling are filled.
 
     Note that if \code{\link{reSample}} is executed on an \code{\linkS4class{Enrichment}} every new resampling
@@ -93,14 +93,14 @@ show(toyEnrich)
 toyEnrich["Loss"] <- toyEnrichment["Loss"]
 toyEnrich["Loss"]
 
-toyEnrich <- enrichment(Loss = toyEnrichment["Loss"], 
+toyEnrich <- enrichment(Loss = toyEnrichment["Loss"],
                         eSNP = toyEnrichment["eSNP"])
 toyEnrich <- enrichment(Loss = toyEnrichment["Loss"])
 
 \dontrun{
-reSample(object = toyEnrichment, 
-         nSample = 10, 
-         empiricPvalue = FALSE, 
+reSample(object = toyEnrichment,
+         nSample = 10,
+         empiricPvalue = FALSE,
          MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
          mc.cores = 1,
          onlyGenome = FALSE)

@@ -857,20 +857,16 @@ setMethod(f = "compareEnrichment", signature = "ANY", definition = function (obj
         if (identical(l1, l2)) {
             stop('[Enrichment:compareEnrichment] Both lists are identical.', call. = FALSE)
         } else {}
-        
+
         if (is.null(object.x@Call$reSample$nSample) | is.null(object.y@Call$reSample$nSample)) {
             cat("########## Resample objects Start ##########\n")
             if (is.null(object.x@Call$reSample$nSample)) {
                 cat("  Resampling object.x ...\n")
                 .verbose(reSample(object = object.x, nSample = nSample, empiricPvalue = empiricPvalue, MAFpool = MAFpool, mc.cores = mc.cores, onlyGenome = onlyGenome))
-                # .verbose(reSample(object = object.x, nSample = 10, empiricPvalue = empiricPvalue, MAFpool = MAFpool, mc.cores = mc.cores, onlyGenome = onlyGenome))
-                # .verbose(reSample(object = object.x, nSample = nSample-10, empiricPvalue = empiricPvalue, MAFpool = MAFpool, mc.cores = mc.cores, onlyGenome = onlyGenome))
             } else {}
             if (is.null(object.y@Call$reSample$nSample)) {
                 cat("  Resampling object.y ...\n")
                 .verbose(reSample(object = object.y, nSample = nSample, empiricPvalue = empiricPvalue, MAFpool = MAFpool, mc.cores = mc.cores, onlyGenome = onlyGenome))
-                # .verbose(reSample(object = object.y, nSample = 10, empiricPvalue = empiricPvalue, MAFpool = MAFpool, mc.cores = mc.cores, onlyGenome = onlyGenome))
-                # .verbose(reSample(object = object.y, nSample = nSample-10, empiricPvalue = empiricPvalue, MAFpool = MAFpool, mc.cores = mc.cores, onlyGenome = onlyGenome))
             } else {}
             cat("########### Resample objects End ###########\n")
         } else {}
@@ -897,7 +893,6 @@ setMethod(f = "compareEnrichment", signature = "ANY", definition = function (obj
         if (onlyGenome == FALSE) {
             listRes <- eval(parse(text = paste0("list(", paste(paste0("Chrom", seq(22), " = NULL"), collapse = ", "), ")")))
             for (iChr in seq(22)) {
-                # cat("  **** Chromosome", if (nchar(iChr) == 1) {paste0("0", iChr)} else {iChr}, "Comparison Start ****\n")
                 cat("  Chromosome ", if (nchar(iChr) == 1) {paste0("0", iChr)} else {iChr}, ": ", sep = "")
                 listRes[[iChr]] <- .compareEnrich(object1 = object1@Chromosomes[[iChr]], object2 = object2@Chromosomes[[iChr]], nSample = nSample, empiricPvalue = empiricPvalue, sigThresh = sigThresh, MAFpool = MAFpool, mc.cores = mc.cores)
                 if (identical(sort(object1@Chromosomes[[iChr]]@eSNP@List), sort(object2@Chromosomes[[iChr]]@eSNP@List))) {
@@ -927,7 +922,6 @@ setMethod(f = "compareEnrichment", signature = "ANY", definition = function (obj
         colnames(res[["xSNP"]]) <- namesRes
 
         cat("############# Comparison End ###############\n")
-        # return(res)
         return(invisible(list(summary = res, object1 = enrichObject1, object2 = enrichObject2, comparison = result)))
     } else {
         stop('[Enrichment:compareEnrichment] "Enrichment" object is required.', call. = FALSE)
@@ -965,7 +959,6 @@ setMethod(f = "plot", signature = "Enrichment", definition = function (x, what =
             resamplingClean <- resamplingInterv[!(is.na(resamplingInterv) | is.infinite(resamplingInterv))]
             mu <- mean(resamplingClean)
             sigma <- sqrt(var(resamplingClean))
-            # sigma <- sqrt((sum((resamplingClean-mu)^2))/(length(resamplingClean)-1))
 
             if (sigma==0 | is.na(sigma)) {
                 if (mu==0 ) {
@@ -978,11 +971,6 @@ setMethod(f = "plot", signature = "Enrichment", definition = function (x, what =
             }
         })
         names(ERsample) <- interv
-        # if (var(ERsample)==0) {
-            # return(as.matrix(ERsample))
-        # } else {
-            # return(scale(ERsample))
-        # }
         return(as.matrix(ERsample))
     }
 
@@ -1023,11 +1011,11 @@ setMethod(f = "plot", signature = "Enrichment", definition = function (x, what =
             require(ggplot2)
             require(grid)
 
-            multiplot <- function (..., plotlist = NULL, file, cols = 1, layout = NULL) {
+            multiplot <- function (..., plotlist = NULL, cols = 1, rows = 1, layout = NULL) {
                 plots <- c(list(...), plotlist)
                 numPlots = length(plots)
                 if (is.null(layout)) {
-                    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)), ncol = cols, nrow = ceiling(numPlots/cols), byrow = TRUE)
+                    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)), ncol = cols, nrow = rows, byrow = TRUE)
                 } else {}
                 if (numPlots==1) {
                     print(plots[[1]])
@@ -1065,8 +1053,51 @@ setMethod(f = "plot", signature = "Enrichment", definition = function (x, what =
                 colnames(tmp) <- c("IID", "Resampling", "Z")
 
                 p <- ggplot(data = tmp, aes(x = as.numeric(Resampling), y = Z, colour = IID)) + geom_line()
+                noGridColour <- c("gray90", "grey95")
+                base_size <- 12
+                base_family <- ""
+                p <- p + theme(
+                    line = element_line(colour = "black", size = 0.5, linetype = 1, lineend = "butt"),
+                    rect = element_rect(fill = "white", colour = "black", size = 0.5, linetype = 1),
+                    text = element_text(family = base_family, face = "plain", colour = "black", size = base_size, hjust = 0.5, vjust = 0.5, angle = 0, lineheight = 0.9),
+                    axis.text = element_text(size = rel(0.8), colour = "black"),
+                    strip.text = element_text(size = rel(0.8)),
+                    axis.line = element_blank(),
+                    axis.text.x = element_text(vjust = 1),
+                    axis.text.y = element_text(hjust = 1),
+                    axis.ticks = element_line(colour = "black"),
+                    axis.title.x = element_text(),
+                    axis.title.y = element_text(angle = 90),
+                    axis.ticks.length = unit(0.15, "cm"),
+                    axis.ticks.margin = unit(0.1, "cm"),
+                    legend.background = element_rect(fill = "white", colour = "black"),
+                    legend.margin = unit(0.2, "cm"),
+                    legend.key = element_rect(fill = "white", colour = "black"),
+                    legend.key.size = unit(1.2, "lines"),
+                    legend.key.height = NULL,
+                    legend.key.width = NULL,
+                    legend.text = element_text(size = rel(0.8)),
+                    legend.text.align = NULL,
+                    legend.title = element_text(size = rel(0.8), face = "bold", hjust = 0),
+                    legend.title.align = NULL,
+                    legend.position = "right",
+                    legend.direction = NULL,
+                    legend.justification = "center",
+                    legend.box = NULL,
+                    panel.background = element_rect(fill = "white", colour = "black"),
+                    panel.border = element_blank(),
+                    panel.grid.major = element_line(colour = noGridColour[1]),
+                    panel.grid.minor = element_line(colour = noGridColour[length(noGridColour)], size = 0.25),
+                    panel.margin = unit(0.25, "lines"),
+                    strip.background = element_rect(fill = "black", colour = "black"),
+                    strip.text.x = element_text(colour = "white"),
+                    strip.text.y = element_text(angle = -90, colour = "white"),
+                    plot.background = element_rect(colour = "white"),
+                    plot.title = element_text(size = rel(1.2)),
+                    plot.margin = unit(c(1, 1, 0.5, 0.5), "lines"),
+                    complete = TRUE
+                )
                 p <- p + xlab(paste(type, "Resampling"))
-                # if (what == "All" | length(what)>1) {
                 if (ncol(matrixER[[type]])>1) {
                     p <- p + ylab(paste(ylab, "(scale and center)"))
                 } else {
@@ -1089,7 +1120,6 @@ setMethod(f = "plot", signature = "Enrichment", definition = function (x, what =
                     } else {}
                     rangeZ <- seq(rangeZtmp[1], rangeZtmp[2], by = diff(rangeZtmp)*1/3)
                     names(rangeZ) <- c("0%", "33%", "66%", "100%")
-                    # rangeZ <- quantile(tmp[, "Z"], probs = c(0, 0.33, 0.50, 0.66, 1))
                     rangeQuarter <- range(tmp[quarter, "Z"])
                     inf <- apply(sapply(rangeQuarter, function (lim) {
                         lim<rangeZ
@@ -1105,7 +1135,7 @@ setMethod(f = "plot", signature = "Enrichment", definition = function (x, what =
                 }
 
                 if ("Genome" %in% unique(tmp$IID)) {
-                    p <- p + scale_colour_manual(values = c("black", .ggplotColours(length(unique(tmp$IID))-1)))
+                    p <- p + scale_colour_manual(values = c("black", .ggplotColours(ifelse(length(unique(tmp$IID))-1>0, length(unique(tmp$IID))-1, 1))))
                 } else {}
                 listPlots[[type]] <- p
             }
