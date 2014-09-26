@@ -182,7 +182,7 @@ writeLD <- function (pattern = "Chrom", snpInfoDir, signalFile, ldDir = NULL, ld
             ldData <- replace(ldData, grep(TRUE, isNA), 0)
         } else {}
         ldData <- apply(ldData, 1, function (li) { which(li>ldThresh) })
-        resLD <- data.frame(matrix(unlist(strsplit(names(unlist(ldData)), "\\.")), ncol = 2, byrow = TRUE, dimnames = list(NULL, c("SNP_A", "SNP_B"))))
+        resLD <- data.frame(matrix(unlist(strsplit(names(unlist(ldData)), "\\.")), ncol = 2, byrow = TRUE, dimnames = list(NULL, c("SNP_A", "SNP_B"))), stringsAsFactors = FALSE)
         resLD <- resLD[which(resLD[, 1]!=resLD[, 2]), ]
 
         ### Check LD distance
@@ -633,7 +633,9 @@ readEnrichment <- function (pattern = "Chrom", signalFile, transcriptFile = FALS
 
     popSNP4Sample <- split(eList, data[eList, "MAFpool"])
     assoc_eSNP <- factor(data[eList, "PVALUE"] < sigThresh, levels = c(FALSE, TRUE))
-    assoc_xSNP <- factor(data[xList, "PVALUE"] < sigThresh, levels = c(FALSE, TRUE))
+    if (isLD) {
+        assoc_xSNP <- factor(data[xList, "PVALUE"] < sigThresh, levels = c(FALSE, TRUE))
+    } else { }
     rm(data)
 
     cat("0.. ")

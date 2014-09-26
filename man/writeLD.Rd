@@ -59,8 +59,6 @@ signalFile <- system.file("extdata/Signal/toySignal.txt",
                           package = "snpEnrichment")
 snpInfoDir <- system.file("extdata/snpInfo",
                           package = "snpEnrichment")
-snpListDir <- system.file("extdata/List",
-                          package = "snpEnrichment")
 writeLD(pattern = "Chrom", snpInfoDir, signalFile,
         ldDir = NULL, ldThresh = 0.8, mc.cores = 1)}
 }

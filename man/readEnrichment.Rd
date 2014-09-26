@@ -65,12 +65,11 @@ snpListDir <- system.file("extdata/List",
                           package = "snpEnrichment")
 signalFile <- system.file("extdata/Signal/toySignal.txt",
                           package = "snpEnrichment")
-excludeFile <- system.file("extdata/Exclude/toyExclude.txt",
-                           package = "snpEnrichment")
 snpInfoDir <- system.file("extdata/snpInfo", package = "snpEnrichment")
 data(transcript)
 transcriptFile <- transcript
 
+initFiles(pattern = "Chrom", snpInfoDir, signalFile, mc.cores = 1)
 toy_M1 <- readEnrichment(pattern = "Chrom",
                          signalFile,
                          transcriptFile,

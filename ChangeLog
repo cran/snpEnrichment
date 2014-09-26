@@ -1,3 +1,21 @@
+2014-09-26 Mickael Canouil
+        * DESCRIPTION: version is 1.5-0
+        * R/Global.R: Fix a bug in 'compareEnich' when 'xSNP' was missing in "object.*".
+        * man/*.Rd: Some correction in example.
+
+
+2014-09-23 Mickael Canouil
+        * DESCRIPTION: version is 1.4-3
+        * man/*.Rd: Update according to R code changes.
+
+
+2014-09-19 Mickael Canouil
+        * DESCRIPTION: version is 1.4-2
+        * R/enrichment.R: Fix a bug when 'xSNP' field is empty in 'plot' method.
+        * R/Global.R: Fix 'options(stringsAsFactors = FALSE)' in 'writeLD'.
+        * man/snpEnrichment-package.Rd: Update according to DESCRIPTION file.
+
+
 2014-09-11 Mickael Canouil
         * DESCRIPTION: version is 1.4-1
         * R/*.R: Minor optimizations.

@@ -119,6 +119,6 @@ excludeFile <- c(
     "rs1374393", "rs13268781", "rs11134505", "rs7325241", "rs7520109"
 )
 
-toyM1_exclude <- excludeSNP(toyEnrichment, excludeFile, mc.cores = 1)
-summary(toyM1_exclude)}
+toyEnrichment_exclude <- excludeSNP(toyEnrichment, excludeFile, mc.cores = 1)
+summary(toyEnrichment_exclude)}
 }

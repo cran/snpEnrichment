@@ -18,8 +18,10 @@ Implements classes and methods for large-scale SNP enrichment analysis (e.g. SNP
     Maintainer: \tab Mickael Canouil <mickael.canouil at good.ibl.fr>\cr
     % Description: \tab Implements classes and methods for large-scale SNP enrichment analysis \cr (e.g. SNPs associated with genes expression and a GWAS signal) \cr
     License: \tab GPL (>= 2)\cr
-    Depends: \tab R (>= 2.15.0), methods, parallel\cr
-    URL: \tab http://www-good.ibl.fr/\cr
+    Depends: \tab R (>= 2.15.0), methods\cr
+    Suggests: \tab grid, ggplot2\cr
+    Imports: \tab parallel, snpStats\cr
+    URL: \tab https://github.com/mcanouil/snpEnrichment\cr
     Encoding: \tab UTF-8\cr
     }
 }
@@ -44,11 +46,9 @@ Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnri
 
 \examples{
 #######################
-### 1. Data Preparation
+### 1. Data preparation
 \dontrun{
 snpInfoDir <- system.file("extdata/snpInfo",
-                          package = "snpEnrichment")
-snpListDir <- system.file("extdata/List",
                           package = "snpEnrichment")
 signalFile <- system.file("extdata/Signal/toySignal.txt",
                           package = "snpEnrichment")
@@ -61,12 +61,6 @@ writeLD(pattern = "Chrom", snpInfoDir, signalFile,
 ### 2. Reading data
 \dontrun{
 snpListDir <- system.file("extdata/List",
-                          package = "snpEnrichment")
-signalFile <- system.file("extdata/Signal/toySignal.txt",
-                          package = "snpEnrichment")
-excludeFile <- system.file("extdata/Exclude/toyExclude.txt",
-                           package = "snpEnrichment")
-snpInfoDir <- system.file("extdata/snpInfo",
                           package = "snpEnrichment")
 data(transcript)
 transcriptFile <- transcript
@@ -82,20 +76,26 @@ toy_M1}
 ########################
 ### 3. Computing results
 \dontrun{
+reSample(object = toy_M1,
+         nSample = 10,
+         empiricPvalue = FALSE,
+         MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
+         mc.cores = 1,
+         onlyGenome = FALSE)
+# OR
 data(toyEnrichment)
 reSample(object = toyEnrichment,
          nSample = 10,
          empiricPvalue = FALSE,
          MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5),
          mc.cores = 1,
-         onlyGenome = FALSE)}
+         onlyGenome = FALSE)
+}
 
 
 #######################
-### 5. Further analysis
-## Exclude SNP from original list.
+### 4. Further analysis: Exclude SNP from original list.
 \dontrun{
-data(toyEnrichment)
 excludeFile <- c(
     "rs7897180", "rs4725479", "rs315404", "rs17390391", "rs1650670",
     "rs6783390", "rs1642009", "rs4756586", "rs11995037", "rs4977345",
@@ -108,11 +108,14 @@ excludeFile <- c(
     "rs10832329", "rs12446540", "rs7676237", "rs869922", "rs16823426",
     "rs1374393", "rs13268781", "rs11134505", "rs7325241", "rs7520109"
 )
+# OR
+excludeFile <- system.file("extdata/Exclude/toyExclude.txt",
+                           package = "snpEnrichment")
 
-toyM1_exclude <- excludeSNP(toyEnrichment, excludeFile, mc.cores = 1)
+toyEnrichment_exclude <- excludeSNP(toyEnrichment, excludeFile, mc.cores = 1)
 
 compareResults <- compareEnrichment(object.x = toyEnrichment,
-                                    object.y = toyM1_exclude,
+                                    object.y = toyEnrichment_exclude,
                                     pattern = "Chrom",
                                     nSample = 10,
                                     empiricPvalue = FALSE,
@@ -121,11 +124,14 @@ compareResults <- compareEnrichment(object.x = toyEnrichment,
 
 
 ####################
-### 4. Watch results
+### 5. Watch results
 \dontrun{
+show(toy_M1)
+summary(toy_M1)
+
 show(toyEnrichment)
 summary(toyEnrichment)
 
-show(toyM1_exclude)
-summary(toyM1_exclude)}
+show(toyEnrichment_exclude)
+summary(toyEnrichment_exclude)}
 }

@@ -63,7 +63,10 @@ excludeFile <- c(
     "rs10832329", "rs12446540", "rs7676237", "rs869922", "rs16823426",
     "rs1374393", "rs13268781", "rs11134505", "rs7325241", "rs7520109"
 )
+# OR
+excludeFile <- system.file("extdata/Exclude/toyExclude.txt",
+                           package = "snpEnrichment")
 
-toyM1_exclude <- excludeSNP(toyEnrichment, excludeFile, mc.cores = 1)
-toyM1_exclude}
+toyEnrichment_exclude <- excludeSNP(toyEnrichment, excludeFile, mc.cores = 1)
+toyEnrichment_exclude}
 }

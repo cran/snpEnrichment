@@ -940,6 +940,9 @@ setMethod(f = "plot", signature = "Enrichment", definition = function (x, what =
     if (is.null(types) | any(!types%in%c("eSNP", "xSNP"))) {
         stop('[Enrichment:plot] "types" must be: "eSNP" and/or "xSNP".', call. = FALSE)
     } else {}
+    if (any(types%in%"xSNP") & length(x["xSNP"]["List"])==0) {
+        types <- "eSNP"
+    } else {}
 
     .computeER4plot <- function (EnrichSNPObject) {
         ER <- EnrichSNPObject@EnrichmentRatio

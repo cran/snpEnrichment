@@ -42,9 +42,9 @@ Return a \code{list} of three elements:
     \item{comparison}{\code{\linkS4class{Enrichment}} object from the comparison between \code{object.x} and \code{object.y}.}
 }
 
-% \note{
-% Still in development.
-% }
+\note{
+Still in development.
+}
 
 \seealso{
 Overview : \code{\link{snpEnrichment-package}} \cr
@@ -82,11 +82,14 @@ excludeFile <- c(
     "rs10832329", "rs12446540", "rs7676237", "rs869922", "rs16823426",
     "rs1374393", "rs13268781", "rs11134505", "rs7325241", "rs7520109"
 )
+# OR
+excludeFile <- system.file("extdata/Exclude/toyExclude.txt",
+                           package = "snpEnrichment")
 
-toyM1_exclude <- excludeSNP(toyEnrichment, excludeFile, mc.cores = 1)
+toyEnrichment_exclude <- excludeSNP(toyEnrichment, excludeFile, mc.cores = 1)
 
 compareResults <- compareEnrichment(object.x = toyEnrichment,
-                                    object.y = toyM1_exclude,
+                                    object.y = toyEnrichment_exclude,
                                     pattern = "Chrom",
                                     nSample = 10,
                                     empiricPvalue = FALSE,
