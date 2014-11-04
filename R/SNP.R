@@ -102,7 +102,6 @@ setMethod(f = "print", signature = "EnrichSNP", definition = function (x) {
             cat("\n")
             resFormat <- cbind(c("", rownames(object@Table)), rbind(colnames(object@Table), apply(round(object@Table, digits = 4), 2, as.character)))
             cat(paste("     ", apply(apply(matrix(paste0(" ", resFormat, " "), nrow = nrow(resFormat)), 2, format, justify = "centre"), 1, paste, collapse = ""), "\n", sep = "", collapse = ""))
-            # cat("\n")
         }
     cat("\n   - EnrichmentRatio :", ifelse(length(object@EnrichmentRatio) == 0, NA, object@EnrichmentRatio))
     cat("\n   - Z               :", ifelse(length(object@Z) == 0, NA, object@Z))
@@ -122,7 +121,7 @@ setMethod(f = "[", signature = "EnrichSNP", definition = function (x, i, j, drop
         "Z" = {return(x@Z)},
         "PValue" = {return(x@PValue)},
         "Resampling" = {return(x@Resampling)},
-        stop('[EnrichSNP:get] ', i, ' is not a "EnrichSNP" slot', call. = FALSE)
+        stop('[EnrichSNP:get] ', i, ' is not a "EnrichSNP" slot.', call. = FALSE)
     )
 })
 
@@ -135,11 +134,12 @@ setMethod(f = "[<-", signature = "EnrichSNP", definition = function (x, i, j, va
         "Z" = {x@Z <- value},
         "PValue" = {x@PValue <- value},
         "Resampling" = {x@Resampling <- value},
-        stop('[EnrichSNP:set] ', i, ' is not a "EnrichSNP" slot', call. = FALSE)
+        stop('[EnrichSNP:set] ', i, ' is not a "EnrichSNP" slot.', call. = FALSE)
     )
     validObject(x)
     return(x)
 })
+
 
 setMethod(f = "reset", signature = "EnrichSNP", definition = function (object, i) {
     switch(EXPR = i,
@@ -149,7 +149,7 @@ setMethod(f = "reset", signature = "EnrichSNP", definition = function (object, i
         "Z" = {object@Z <- numeric()},
         "PValue" = {object@PValue <- numeric()},
         "Resampling" = {object@Resampling <- matrix(0, ncol = 5, nrow = 0)},
-        stop('[EnrichSNP:reset] ', i, ' is not a "EnrichSNP" slot', call. = FALSE)
+        stop('[EnrichSNP:reset] ', i, ' is not a "EnrichSNP" slot.', call. = FALSE)
     )
     return(object)
 })

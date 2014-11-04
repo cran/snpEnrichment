@@ -38,7 +38,7 @@ It's a part of \code{\linkS4class{Chromosome}} and \code{\linkS4class{Enrichment
         \item{object["slotName"]: }{Get the value of the field \code{slotName}.}
         \item{object["slotName"]<-value: }{Set \code{value} to the field \code{slotName}.}
         \item{show(object): }{Return the formatted values of \code{\linkS4class{EnrichSNP}} object.}
-        \item{print(x): }{Return the values of \code{\linkS4class{EnrichSNP}} object as a matrix.}
+        % \item{print(x): }{Return the values of \code{\linkS4class{EnrichSNP}} object as a matrix.}
     }
 }
 
@@ -50,7 +50,7 @@ It is a part of the \code{\linkS4class{Enrichment}} and \code{\linkS4class{Chrom
 \seealso{
 Overview : \code{\link{snpEnrichment-package}} \cr
 Classes : \code{\linkS4class{Enrichment}}, \code{\linkS4class{Chromosome}}, \code{\linkS4class{EnrichSNP}} \cr
-Methods :  \code{\link{plot}}, \code{\link{reSample}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
+Methods : \code{\link{plot}}, \code{\link{reSample}}, \code{\link{getEnrichSNP}}, \code{\link{excludeSNP}}, \code{\link{compareEnrichment}}, \cr
             \code{\link{enrichment}}, \code{\link{is.enrichment}}, \code{\link{chromosome}}, \code{\link{is.chromosome}} \cr
 Functions : \code{\link{initFiles}}, \code{\link{writeLD}}, \code{\link{readEnrichment}}
 }

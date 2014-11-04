@@ -54,26 +54,26 @@ setMethod(f = "is.chromosome", signature = "ANY", definition = function (object)
 })
 
 
-setMethod(f = "print", signature = "Chromosome", definition = function (x, types = c("eSNP", "xSNP")) {
+setMethod(f = "print", signature = "Chromosome", definition = function (x, type = c("eSNP", "xSNP")) {
     if (missing(x)) {
         stop('[Chromosome:print] "x" is missing.', call. = FALSE)
     } else {}
-    if (is.null(types) | any(!types%in%c("eSNP", "xSNP"))) {
-        stop('[Chromosome:print] "types" must be: "eSNP" and/or "xSNP".', call. = FALSE)
+    if (is.null(type) | any(!type%in%c("eSNP", "xSNP"))) {
+        stop('[Chromosome:print] "type" must be: "eSNP" and/or "xSNP".', call. = FALSE)
     } else {}
 
     res <- list()
-    for (type in types) {
-        resTmp <- print(x[type])
-        colnames(resTmp) <- c("EnrichmentRatio", "Z", "PVALUE", "nbSample", "SNP", type)
-        rownames(resTmp) <-  paste("Chrom", type, sep = ":")
-        res[[type]] <- resTmp
+    for (iType in type) {
+        resTmp <- print(x[iType])
+        colnames(resTmp) <- c("EnrichmentRatio", "Z", "PValue", "nSample", "TotalSNP", iType)
+        rownames(resTmp) <-  paste("Chrom", iType, sep = ":")
+        res[[iType]] <- resTmp
     }
-    if (length(types)==1) {
+    if (length(type)==1) {
         return(res[[1]])
     } else {
         res <- do.call("rbind", res)
-        rownames(res) <- paste("Chrom", types, sep = ":")
+        rownames(res) <- paste("Chrom", type, sep = ":")
         return(res)
     }
     return(res)
@@ -122,7 +122,7 @@ setMethod(f = "[", signature = "Chromosome", definition = function (x, i, j, dro
         "LD" = {return(x@LD)},
         "eSNP" = {return(x@eSNP)},
         "xSNP" = {return(x@xSNP)},
-        stop('[Chromosome:get] ', i, ' is not a "Chromosome" slot', call. = FALSE)
+        stop('[Chromosome:get] ', i, ' is not a "Chromosome" slot.', call. = FALSE)
     )
 })
 
@@ -133,7 +133,7 @@ setMethod(f = "[<-", signature = "Chromosome", definition = function (x, i, j, v
         "LD" = {x@LD <- value},
         "eSNP" = {x@eSNP <- value},
         "xSNP" = {x@xSNP <- value},
-        stop('[Chromosome:get] ', i, ' is not a "Chromosome" slot', call. = FALSE)
+        stop('[Chromosome:get] ', i, ' is not a "Chromosome" slot.', call. = FALSE)
     )
     validObject(x)
     return(invisible(x))
@@ -157,7 +157,7 @@ setMethod(f = "computeER", signature = "Chromosome", definition = function (obje
         })
         return(object)
     } else {
-        stop('[Chromosome:computeER] "Chromosome" object is required', call. = FALSE)
+        stop('[Chromosome:computeER] "Chromosome" object is required.', call. = FALSE)
     }
 })
 
@@ -190,7 +190,6 @@ setMethod(f = "doLDblock", signature = "Chromosome", definition = function (obje
         names(byBlock) <- NULL
         LDblock <- LDblock[order(LDblock[, 1]), ]
         rm(chrLD, byBlock)
-        # GC()
 
         blockLim <- NULL
         for (iBlock in seq(nrow(LDblock))) {
@@ -216,7 +215,6 @@ setMethod(f = "doLDblock", signature = "Chromosome", definition = function (obje
             }
         }
         rm(LDblock)
-        # GC()
 
         blockLim <- cbind(blockLim, seq(nrow(blockLim)))
         colnames(blockLim) <- c("MIN", "MAX", "IDBLOCK")
@@ -260,21 +258,21 @@ setMethod(f = "doLDblock", signature = "Chromosome", definition = function (obje
         object@Data <- data
         return(object)
     } else {
-        stop('[Chromosome:doLDblock] "Chromosome" Object is required', call. = FALSE)
+        stop('[Chromosome:doLDblock] "Chromosome" Object is required.', call. = FALSE)
     }
 })
 
 
-setMethod(f = "reSample", signature = "Chromosome", definition = function (object, nSample = 100, empiricPvalue = FALSE, sigThresh = 0.05, MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5), mc.cores = 1) {
+setMethod(f = "reSample", signature = "Chromosome", definition = function (object, nSample = 100, empiricPvalue = TRUE, sigThresh = 0.05, MAFpool = c(0.05, 0.10, 0.2, 0.3, 0.4, 0.5), mc.cores = 1) {
     if (!missing(object)) {
         if (nSample<10) {
             nSample = 10
-            warning('[Enrichment:reSample] nSample was increased to 10', call. = FALSE)
+            warning('[Enrichment:reSample] nSample was increased to 10.', call. = FALSE)
         } else {}
         result <- .reSample(object = object, nSample = nSample, empiricPvalue = empiricPvalue, sigThresh = sigThresh, MAFpool = MAFpool, mc.cores = mc.cores)
         return(result)
     } else {
-        stop('[Enrichment:reSample] "Enrichment" object is required', call. = FALSE)
+        stop('[Enrichment:reSample] "Enrichment" object is required.', call. = FALSE)
     }
 })
 
@@ -323,7 +321,7 @@ setMethod(f = "reset", signature = "Chromosome", definition = function (object, 
                 object[type]@Resampling <- matrix(0, ncol = 5, nrow = 0)
             }
         },
-        stop('[Enrichment:reset] ', i, ' is not a "Enrichment" slot', call. = FALSE)
+        stop('[Enrichment:reset] ', i, ' is not a "Enrichment" slot.', call. = FALSE)
     )
     return(object)
 })
