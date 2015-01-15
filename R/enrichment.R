@@ -639,7 +639,7 @@ setMethod(f = "reSample", signature = "Enrichment", definition = function (objec
         formal <- as.list(names(formals(as.character(sysCall))))
         names(formal) <- formal
         if (is.null(names(argsSNP))) {
-            names(argsSNP) <- names(formal)[seq(length(argsSNP))]
+            names(argsSNP) <- names(formal)[seq_along(argsSNP)]
         } else {
             emptyNames <- which(names(argsSNP)=="")
             names(argsSNP)[emptyNames] <- names(formal)[emptyNames]
@@ -1089,7 +1089,8 @@ setMethod(f = "plot", signature = "Enrichment", definition = function (x, what =
         is.installed <- function (mypkg) {
             is.element(mypkg, installed.packages()[,1])
         }
-        if (all(is.installed(c("ggplot2", "grid")))) {
+        # if (all(is.installed(c("ggplot2", "grid")))) {
+        if (require("ggplot2") & require("grid")) {
             require(ggplot2)
             require(grid)
 
@@ -1139,7 +1140,7 @@ setMethod(f = "plot", signature = "Enrichment", definition = function (x, what =
                 colnames(tmp) <- c("IID", "Resampling", "Z")
 
                 p <- ggplot(data = tmp, aes(x = as.numeric(Resampling), y = Z, colour = IID)) + geom_line()
-                noGridColour <- c("gray90", "grey95")
+                noGridColour <- "transparent" # c("gray90", "grey95")
                 base_size <- 12
                 base_family <- ""
                 p <- p + theme(
